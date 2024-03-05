@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/usuario",produces = {"application/json"})
+@RequestMapping(value = "/usuario")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
