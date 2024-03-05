@@ -35,12 +35,17 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (!login.isEmpty()){
                 // Obtém a autoridade do token
                 String authority = extractAuthorityFromToken(token);
-                UserDetails user = usuarioRepository.findByEmail(login);
+//                UserDetails user = usuarioRepository.findByEmail(login);
 
-                if (user != null){
-                    // Define as autoridades do usuário na autenticação
-                    var authentication = new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList(authority));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // Verifica se o usuário já está autenticado
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails user = usuarioRepository.findByEmail(login);
+                    if (user != null) {
+                        // Define as autoridades do usuário na autenticação
+                        var authentication = new UsernamePasswordAuthenticationToken(user, null, AuthorityUtils.createAuthorityList(authority));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
             }
         }

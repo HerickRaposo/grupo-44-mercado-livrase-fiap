@@ -21,7 +21,7 @@ public class loginController {
     @Autowired
     private HttpServletRequest request;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity login(@RequestBody @Valid LoginDTO dto){
         List<String> violacoesToList = loginService.validate(dto);
         if (!violacoesToList.isEmpty()) {
