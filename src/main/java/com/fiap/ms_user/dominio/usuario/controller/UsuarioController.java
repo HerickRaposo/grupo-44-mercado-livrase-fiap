@@ -35,7 +35,7 @@ public class UsuarioController {
     }
 
 
-    @PostMapping("/aqui")
+    @PostMapping()
     public ResponseEntity insert(@RequestBody UsuarioDTO usuarioDTO) {
         List<String> violacoesToList = usuarioService.validate(usuarioDTO);
         if (!violacoesToList.isEmpty()) {
