@@ -5,6 +5,7 @@ import com.fiap.ms_user.jesse.dto.RegisteredUser;
 import com.fiap.ms_user.jesse.dto.SaveUser;
 import com.fiap.ms_user.jesse.dto.auth.AuthenticationReponse;
 import com.fiap.ms_user.jesse.dto.auth.AuthenticationRequest;
+import com.fiap.ms_user.jesse.exceptions.DataIntegrityViolationException;
 import com.fiap.ms_user.jesse.persistence.entity.User;
 import com.fiap.ms_user.jesse.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +33,28 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public RegisteredUser registerOneCustomer(SaveUser newUser) {
-
-        User user = userService.registerOneCustomer(newUser);
-
         RegisteredUser userDto = new RegisteredUser();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setUsername(user.getUsername());
-        userDto.getRole(user.getRole().name());
+        try {
 
-        String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
+            User user = userService.registerOneCustomer(newUser);
 
-        userDto.setJwt(jwt);
+//            RegisteredUser userDto = new RegisteredUser();
+            userDto.setId(user.getId());
+            userDto.setName(user.getName());
+            userDto.setUsername(user.getUsername());
+            userDto.getRole(user.getRole().name());
 
-        return userDto;
+            String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
+
+            userDto.setJwt(jwt);
+
+            return userDto;
+        }catch (DataIntegrityViolationException e){
+//            System.out.println(e);
+            throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
+
+        }
+
     }
 
     private Map<String, Object> generateExtraClaims(User user) {

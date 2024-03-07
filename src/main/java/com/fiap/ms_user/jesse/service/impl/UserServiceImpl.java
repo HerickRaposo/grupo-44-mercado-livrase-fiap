@@ -1,6 +1,7 @@
 package com.fiap.ms_user.jesse.service.impl;
 
 import com.fiap.ms_user.jesse.dto.SaveUser;
+import com.fiap.ms_user.jesse.exceptions.DataIntegrityViolationException;
 import com.fiap.ms_user.jesse.exceptions.InvalidPasswordException;
 import com.fiap.ms_user.jesse.persistence.entity.User;
 import com.fiap.ms_user.jesse.persistence.repository.UserRepository;
@@ -34,8 +35,16 @@ public class UserServiceImpl implements UserService {
         user.setName(newUser.getName());
 
         user.setRole(Role.ROLE_CUSTOMER);
+        User saved = null;
+        try {
+            saved = userRepository.save(user);
 
-        return userRepository.save(user);
+        }catch (RuntimeException e){
+            System.out.println(e);
+            throw new DataIntegrityViolationException("Usuário repetido na base " + e.getMessage());
+
+        }
+        return saved;
     }
 
     @Override
