@@ -1,17 +1,17 @@
 package com.fiap.ms_user.jesse.service.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.security.Signature;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -43,8 +43,22 @@ public class JwtService {
 
     private Key generateKey(){
 
-        byte[] key = SECRET_KEY.getBytes();
-        return Keys.hmacShaKeyFor(key);
+        byte[] passwordDecoded = Decoders.BASE64.decode(SECRET_KEY);
+
+//        byte[] key = SECRET_KEY.getBytes();
+        return Keys.hmacShaKeyFor(passwordDecoded);
 
     }
+
+    public String extractUsername(String jwt) {
+
+        return extractAllClaims(jwt).getSubject();
+    }
+
+    private Claims extractAllClaims(String jwt) {
+        return Jwts.parser().setSigningKey( generateKey() ).build()
+                .parseClaimsJws(jwt).getBody();
+    }
+
+
 }
