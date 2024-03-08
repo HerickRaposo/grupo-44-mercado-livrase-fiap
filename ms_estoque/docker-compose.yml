@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  ms-estoque-app: # Renomeado para ms-estoque-app
+    image: openjdk:latest
+    container_name: ms-estoque-app # Renomeado
+    working_dir: /app
+    volumes:
+      - ./target:/app
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://ms-estoque-db:3308/ms_estoque?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=America/Sao_Paulo # Corrigido o nome do serviço
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+    depends_on:
+      - ms-estoque-db # Renomeado
+    command: ["java", "-jar", "/app/parquimetro-app.jar"]
+
+  ms-estoque-db: # Renomeado para ms-estoque-db
+    image: mysql:8
+    container_name: ms-estoque-db # Renomeado
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=grupo44
+    ports:
+      - "3308:3308"
