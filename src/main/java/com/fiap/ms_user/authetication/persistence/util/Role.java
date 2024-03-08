@@ -42,7 +42,7 @@ public enum Role {
 
     private List<RolePermission> permissions;
 
-    Role(List<RolePermission> permission) {
+    Role(List<RolePermission> permissions) {
         this.permissions = permissions;
     }
 

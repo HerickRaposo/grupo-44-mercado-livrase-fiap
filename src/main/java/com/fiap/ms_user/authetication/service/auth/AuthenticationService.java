@@ -41,7 +41,7 @@ public class AuthenticationService {
             userDto.setId(user.getId());
             userDto.setName(user.getName());
             userDto.setUsername(user.getUsername());
-            userDto.getRole(user.getRole().name());
+            userDto.setRole(user.getRole().name());
 
             String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
 
