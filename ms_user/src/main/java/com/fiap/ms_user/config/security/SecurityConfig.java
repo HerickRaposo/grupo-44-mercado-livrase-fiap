@@ -21,20 +21,16 @@ public class SecurityConfig {
     SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/login/validateToken").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuario").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/usuario/aqui").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .build();
-
-
     }
 
     @Bean
@@ -47,6 +43,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

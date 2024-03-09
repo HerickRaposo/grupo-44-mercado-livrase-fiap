@@ -35,7 +35,8 @@ public class UsuarioController {
     }
 
 
-    @PostMapping("/aqui")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity insert(@RequestBody UsuarioDTO usuarioDTO) {
         List<String> violacoesToList = usuarioService.validate(usuarioDTO);
         if (!violacoesToList.isEmpty()) {
