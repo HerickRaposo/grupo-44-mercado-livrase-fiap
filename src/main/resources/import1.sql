@@ -1,5 +1,0 @@
--- INSERT INTO accesso (id, cpf, email, nome, senha) VALUES (1, '12345678900', 'email1@example.com', 'Nome1', 'senha1');
--- INSERT INTO accesso (id, cpf, email, nome, senha) VALUES (2, '12345678901', 'email2@example.com', 'Nome2', 'senha2');
--- INSERT INTO accesso (id, cpf, email, nome, senha) VALUES (3, '12345678902', 'email3@example.com', 'Nome3', 'senha3');
--- INSERT INTO accesso (id, cpf, email, nome, senha) VALUES (4, '12345678903', 'email4@example.com', 'Nome4', 'senha4');
--- INSERT INTO accesso (id, cpf, email, nome, senha) VALUES (5, '12345678904', 'email5@example.com', 'Nome5', 'senha5');
