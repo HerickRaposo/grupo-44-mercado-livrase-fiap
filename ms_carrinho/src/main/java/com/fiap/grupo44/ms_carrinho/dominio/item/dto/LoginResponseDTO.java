@@ -1,9 +1,8 @@
-package com.fiap.ms_estoque.dominio.produto.dto;
+package com.fiap.grupo44.ms_carrinho.dominio.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-//TODO: Verificar comunicação com outros ms
 @Data
 @AllArgsConstructor
 public class LoginResponseDTO {
