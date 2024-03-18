@@ -33,7 +33,9 @@ public class HttpSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authReqConfig -> {
 
-                    authReqConfig.requestMatchers(HttpMethod.POST, "/customers").permitAll();
+                    authReqConfig.requestMatchers(HttpMethod.POST, "/setting/customers").permitAll();
+                    authReqConfig.requestMatchers(HttpMethod.POST, "setting/administrator/cadastra_hole").permitAll();
+                    authReqConfig.requestMatchers(HttpMethod.POST, "setting/administrator/cadastra_hole_assistent").permitAll();
                     authReqConfig.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
                     authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate-token").permitAll();
 

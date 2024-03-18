@@ -25,6 +25,8 @@ import java.util.Optional;
 public class AuthenticationService {
 
 
+
+
     @Autowired
     private UserService userService;
 
@@ -38,25 +40,55 @@ public class AuthenticationService {
         RegisteredUser userDto = new RegisteredUser();
         try {
 
-            User user = userService.registerOneCustomer(newUser);
-
-//            RegisteredUser userDto = new RegisteredUser();
-            userDto.setId(user.getId());
-            userDto.setName(user.getName());
-            userDto.setUsername(user.getUsername());
-            userDto.setRole(user.getRole().name());
-
-            String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
-
-            userDto.setJwt(jwt);
-
-            return userDto;
+            return getRegisteredUser(userService.registerOneCustomer(newUser), userDto);
         }catch (DataIntegrityViolationException e){
 //            System.out.println(e);
             throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
 
         }
 
+    }
+
+    public RegisteredUser registerOneROLE_ADMINISTRATOR(SaveUser newUser) {
+        RegisteredUser userDto = new RegisteredUser();
+        try {
+
+            return getRegisteredUser(userService.registerOneROLE_ADMINISTRATOR(newUser), userDto);
+        }catch (DataIntegrityViolationException e){
+//            System.out.println(e);
+            throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
+
+        }
+
+    }
+
+    public RegisteredUser registerOneOneRoleAssitentAdministrator(SaveUser newUser) {
+        RegisteredUser userDto = new RegisteredUser();
+        try {
+
+            return getRegisteredUser(userService.registerOneRoleAssitentAdministrator(newUser), userDto);
+        }catch (DataIntegrityViolationException e){
+//            System.out.println(e);
+            throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
+
+        }
+
+    }
+
+    private RegisteredUser getRegisteredUser(User userService, RegisteredUser userDto) {
+        User user = userService;
+
+//            RegisteredUser userDto = new RegisteredUser();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUsername(user.getUsername());
+        userDto.setRole(user.getRole().name());
+
+        String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
+
+        userDto.setJwt(jwt);
+
+        return userDto;
     }
 
     private Map<String, Object> generateExtraClaims(User user) {
@@ -113,4 +145,5 @@ public class AuthenticationService {
             return false;
         }
     }
+
 }

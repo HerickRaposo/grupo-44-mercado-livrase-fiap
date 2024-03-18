@@ -17,34 +17,29 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User registerOneCustomer(SaveUser newUser) {
+        return saveUser(newUser, Role.ROLE_CUSTOMER);
+    }
 
-        validatePassword(newUser);
+    @Override
+    public User registerOneROLE_ADMINISTRATOR(SaveUser newUser) {
+        return saveUser(newUser, Role.ROLE_ADMINISTRATOR);
+    }
 
-        User user = new User();
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
-        user.setUsername(newUser.getUsername_or_email());
-        user.setName(newUser.getName());
-
-        user.setRole(Role.ROLE_CUSTOMER);
-        User saved = null;
-        try {
-            saved = userRepository.save(user);
-
-        }catch (RuntimeException e){
-            System.out.println(e);
-            throw new DataIntegrityViolationException("Usuário repetido na base " + e.getMessage());
-
-        }
-        return saved;
+    @Override
+    public User registerOneRoleAssitentAdministrator(SaveUser newUser) {
+        return saveUser(newUser, Role.ROLE_ASSISTANT_ADMINISTRATOR);
     }
 
     @Override
@@ -52,16 +47,27 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
-    private void validatePassword(SaveUser dto) {
+    private User saveUser(SaveUser newUser, Role role) {
+        validatePassword(newUser);
 
-        if(!StringUtils.hasText(dto.getPassword()) || !StringUtils.hasText(dto.getRepeatedPassword())){
-            throw new InvalidPasswordException("Password don't match");
-        }
+        User user = new User();
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        user.setUsername(newUser.getUsername_or_email());
+        user.setName(newUser.getName());
+        user.setRole(role);
 
-        if(!dto.getPassword().equals(dto.getRepeatedPassword())){
-            throw new InvalidPasswordException("Password don't match");
+        try {
+            return userRepository.save(user);
+        } catch (RuntimeException e) {
+            throw new DataIntegrityViolationException("Usuário repetido na base " + e.getMessage());
         }
     }
 
+    private void validatePassword(SaveUser dto) {
+        if (!StringUtils.hasText(dto.getPassword()) || !StringUtils.hasText(dto.getRepeatedPassword()) ||
+                !dto.getPassword().equals(dto.getRepeatedPassword())) {
+            throw new InvalidPasswordException("Password don't match");
+        }
+    }
 
 }
