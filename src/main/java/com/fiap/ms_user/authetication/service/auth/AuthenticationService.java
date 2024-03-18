@@ -10,13 +10,16 @@ import com.fiap.ms_user.authetication.persistence.entity.User;
 import com.fiap.ms_user.authetication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -74,18 +77,30 @@ public class AuthenticationService {
                 authRequest.getUsername(), authRequest.getPassword()
         );
 
+
+
+        try{
+
+
         authenticationManager.authenticate(authentication);
 
-         UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
+        Optional<UserDetails> userOptional = Optional.of(userService.findOneByUsername(authRequest.getUsername()).get());
+            if (userOptional.isPresent()) {
 
-         String jwt = jwtService.genereteToken(user, generateExtraClaims((User) user));
+                UserDetails user = userOptional.get();
 
-         AuthenticationReponse authRsp = new AuthenticationReponse();
-         authRsp.setJwt(jwt);
-         return authRsp;
+                String jwt = jwtService.genereteToken(user, generateExtraClaims((User) user));
 
-
-
+                AuthenticationReponse authRsp = new AuthenticationReponse();
+                authRsp.setJwt(jwt);
+                return authRsp;
+            }else{
+                throw new UsernameNotFoundException("Usuário não encontrado");
+            }
+        }catch (InternalAuthenticationServiceException e) {
+            System.out.println("Erro ao autenticar: " + e.getMessage());
+            throw new InternalAuthenticationServiceException("Erro ao autenticar: Usuário não encontrado!", e);
+        }
     }
 
     public boolean validateToken(String jwt) {
