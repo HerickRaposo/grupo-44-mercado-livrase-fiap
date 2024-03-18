@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/setting")
-public class CustomerController {
+public class RoleAssitentAdministratorController {
 
     @Autowired
     private AuthenticationService authenticationService;
+    
+    @PostMapping("/administrator/cadastra_hole_assistent")
+    public ResponseEntity<RegisteredUser> registerOneRoleAssitentAdministrator(@RequestBody @Valid SaveUser newUser){
 
-    @PostMapping("/customers")
-    public ResponseEntity<RegisteredUser> registerOne(@RequestBody @Valid SaveUser newUser){
-
-        RegisteredUser registeredUser = authenticationService.registerOneCustomer(newUser);
+        RegisteredUser registeredUser = authenticationService.registerOneOneRoleAssitentAdministrator(newUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
 
