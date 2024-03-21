@@ -52,7 +52,7 @@ public class ProdutoService {
         var entity = new Produto();
         BeanUtils.copyProperties(dto, entity);
         if (repo.findByDescricao(dto.getDescricao()) != null){
-            throw new ValidationException("Produto ja cadastrado");
+            throw new ValidationException("Produto ja cadastrado");     //TODO: TRATAR LANÇAMENTO DE EXCESSÃO
         }
 
         var produtoSaved = repo.save(entity);
@@ -81,5 +81,11 @@ public class ProdutoService {
 
     }
 
-
+    public Boolean verificaDisponibilidadeImtem(ProdutoDTO dto)throws Exception{
+        var itemBuscado = findById(dto.getId());
+        if (itemBuscado.getQuantidadeEstoque() >= dto.getQuantidadeEstoque()){
+            return true;
+        }
+        return false;
+    }
 }

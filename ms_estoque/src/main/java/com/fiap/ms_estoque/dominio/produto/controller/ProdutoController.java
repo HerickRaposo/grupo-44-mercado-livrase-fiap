@@ -33,14 +33,7 @@ public class ProdutoController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage
     ) {
-        // Obter token do cabeçalho da requisição
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
-        LoginResponseDTO usuarioResponse = validateToken(token);
-        if (!usuarioResponse.getRole().equals("ADMIN")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
-        // Prosseguir com a lógica original do endpoint
         PageRequest pageRequest = PageRequest.of(page, linesPerPage);
         var produto = produtoService.findAll(pageRequest);
         return ResponseEntity.ok(produto);

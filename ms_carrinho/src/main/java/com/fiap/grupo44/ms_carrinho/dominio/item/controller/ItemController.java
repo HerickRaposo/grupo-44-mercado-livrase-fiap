@@ -16,6 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/carrinho",produces = {"application/json"})
 public class ItemController {
     @Autowired
     private ItemService itemoService;
@@ -28,11 +29,12 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<Page<ItemDTO>> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage
+            @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+            @RequestParam(value = "email_usuario", required = false) String filtroEmailUsuario
     ) {
         // Prosseguir com a lógica original do endpoint
         PageRequest pageRequest = PageRequest.of(page, linesPerPage);
-        var listaItens = itemoService.findAll(pageRequest);
+        var listaItens = itemoService.findAll(pageRequest,filtroEmailUsuario);
         return ResponseEntity.ok(listaItens);
     }
 
@@ -51,20 +53,21 @@ public class ItemController {
         if (!violacoesToList.isEmpty()) {
             return ResponseEntity.badRequest().body(violacoesToList);
         }
-        var produtoSaved = itemoService.insert(itemDTO);
+        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        var produtoSaved = itemoService.insert(itemDTO,token);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand((produtoSaved.getId())).toUri();
         return ResponseEntity.created(uri).body(produtoSaved);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity update(@RequestBody ItemDTO itemDTO, @PathVariable Long id) {
-
-        List<String> violacoesToList = itemoService.validate(itemDTO);
-        if (!violacoesToList.isEmpty()) {
-            return ResponseEntity.badRequest().body(violacoesToList);
-        }
-        var itemUpdated = itemoService.update(id, itemDTO);
-        return  ResponseEntity.ok(itemUpdated);
+    @PatchMapping("atualizaqtde/{id}/{novaQuantidade}")
+    public ResponseEntity<?> updateQuantidade(@PathVariable Long id, @PathVariable Long novaQuantidade) {
+       if (novaQuantidade != 0L){
+           ItemDTO itemDTO = itemoService.updateQuantidade(id, novaQuantidade);
+           return ResponseEntity.ok(itemDTO);
+       } else {
+           itemoService.delete(id);
+           return ResponseEntity.noContent().build();
+       }
     }
 
     @DeleteMapping("/{id}")
