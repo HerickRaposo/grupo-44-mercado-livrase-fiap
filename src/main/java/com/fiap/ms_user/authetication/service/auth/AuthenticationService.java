@@ -10,16 +10,21 @@ import com.fiap.ms_user.authetication.persistence.entity.User;
 import com.fiap.ms_user.authetication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
+
+
 
 
     @Autowired
@@ -32,28 +37,46 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public RegisteredUser registerOneCustomer(SaveUser newUser) {
+        return getGenericUser(userService.registerOneCustomer(newUser));
+
+    }
+
+    private RegisteredUser getGenericUser(User userService) {
         RegisteredUser userDto = new RegisteredUser();
         try {
 
-            User user = userService.registerOneCustomer(newUser);
-
-//            RegisteredUser userDto = new RegisteredUser();
-            userDto.setId(user.getId());
-            userDto.setName(user.getName());
-            userDto.setUsername(user.getUsername());
-            userDto.setRole(user.getRole().name());
-
-            String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
-
-            userDto.setJwt(jwt);
-
-            return userDto;
-        }catch (DataIntegrityViolationException e){
+            return getRegisteredUser(userService, userDto);
+        } catch (DataIntegrityViolationException e) {
 //            System.out.println(e);
             throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
 
         }
+    }
 
+    public RegisteredUser registerOneROLE_ADMINISTRATOR(SaveUser newUser) {
+        return getGenericUser(userService.registerOneROLE_ADMINISTRATOR(newUser));
+
+    }
+
+    public RegisteredUser registerOneOneRoleAssitentAdministrator(SaveUser newUser) {
+        return getGenericUser(userService.registerOneRoleAssitentAdministrator(newUser));
+
+    }
+
+    private RegisteredUser getRegisteredUser(User userService, RegisteredUser userDto) {
+        User user = userService;
+
+//            RegisteredUser userDto = new RegisteredUser();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUsername(user.getUsername());
+        userDto.setRole(user.getRole().name());
+
+        String jwt = jwtService.genereteToken(user, generateExtraClaims(user));
+
+        userDto.setJwt(jwt);
+
+        return userDto;
     }
 
     private Map<String, Object> generateExtraClaims(User user) {
@@ -74,18 +97,30 @@ public class AuthenticationService {
                 authRequest.getUsername(), authRequest.getPassword()
         );
 
+
+
+        try{
+
+
         authenticationManager.authenticate(authentication);
 
-         UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
+        Optional<UserDetails> userOptional = Optional.of(userService.findOneByUsername(authRequest.getUsername()).get());
+            if (userOptional.isPresent()) {
 
-         String jwt = jwtService.genereteToken(user, generateExtraClaims((User) user));
+                UserDetails user = userOptional.get();
 
-         AuthenticationReponse authRsp = new AuthenticationReponse();
-         authRsp.setJwt(jwt);
-         return authRsp;
+                String jwt = jwtService.genereteToken(user, generateExtraClaims((User) user));
 
-
-
+                AuthenticationReponse authRsp = new AuthenticationReponse();
+                authRsp.setJwt(jwt);
+                return authRsp;
+            }else{
+                throw new UsernameNotFoundException("Usuário não encontrado");
+            }
+        }catch (InternalAuthenticationServiceException e) {
+            System.out.println("Erro ao autenticar: " + e.getMessage());
+            throw new InternalAuthenticationServiceException("Erro ao autenticar: Usuário não encontrado!", e);
+        }
     }
 
     public boolean validateToken(String jwt) {
@@ -98,4 +133,5 @@ public class AuthenticationService {
             return false;
         }
     }
+
 }

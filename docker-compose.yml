@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=
     depends_on:
       - ms-usuario-db # Renomeado
-    command: ["java", "-jar", "/app/parquimetro-app.jar"]
+    command: ["java", "-jar", "/app/usuario-app.jar"]
 
   ms-usuario-db: # Renomeado para ms-usuario-db
     image: mysql:8
