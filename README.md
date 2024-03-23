@@ -1,93 +1,497 @@
-# GRUPO 44 Mercado livrase FIAP
+# GRUPO 44 Locação  Hackathon
 
 
 
-## Getting started
+## Introdução:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Conforme solicitado para atender os requisitos logicos e funcionais do tech Chellenge 5 foram desenvolvidos 4 microserviços: Usuario (Para gestão de logins e registros de usuarios), carrinho (Para gestçao de itens adicionados pelos usuarios), estoque (Gerenciamento de produtos cadastrados sendo acessados apenas por ADMs) e por fim o microserviço de pedidos, onde a venda será consolidada, itens serão removidos do estoque e carrinho é limpo,
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Vale lembrar que para facilitar a publicação de projeto colocamos os projetos filhos dentro do microserviço de usuario, no entanto, embora ocupem mesmo espaço em disco cada um deles possuem pom avulso, cada um rodando em portas diferentes previamente configuradas e  bancos distintos.
 
-## Add your files
+<h1 align="center">
+  Desenvolvimento das APIs
+</h1>
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## Tecnologias
+
+[Spring Boot](https://spring.io/projects/spring-boot): Modulo derivado do Spring Framework que facilita desenvolvimento de aplicações java implementando injeção e inversão de dependencias
+
+
+[Spring Security](https://spring.io/projects/spring-security): O Spring Security é uma estrutura que se concentra em fornecer autenticação e autorização para aplicativos Java.
+
+[JSON Web Token (JWT)](https://jwt.io/): O JSON Web Token é um padrão da Internet para a criação de dados com assinatura opcional e/ou criptografia cujo payload contém o JSON que afirma algum número de declarações.
+
+[Docker](https://www.docker.com/): Docker é um conjunto de produtos de plataforma como serviço que usam virtualização de nível de sistema operacional para entregar software em pacotes chamados contêineres.
+
+[GitLab](https://about.gitlab.com/): Plataforma de gerenciamento de ciclo de vida de desenvolvimento de software com versionamento de codigo git.
+
+[Postman](https://learning.postman.com/docs/developer/postman-api/intro-api/): Ferramenta destinada a desenvolvedores que possibilita testar chamadas API e gerar documentação de forma iterativa.Foi usado neste projeto para gerar collections e realizar teste de chamadas aos endpoints;
+
+[Tortoise](https://tortoisegit.org/docs/tortoisegit/): Ferramenta gerencial que facilita manipulação de projetos em GIT. Foi usado neste projeto para resolução de conflitos.
+
+[Sourcetree](https://confluence.atlassian.com/get-started-with-sourcetree): Assim como o Tortoise é uma ferramenta gerencial para facilitar o desenvolvimento de projetos em Git, no entanto possui uma interface mais receptivel e navegabilidade facilitada.Foi usado neste projeto paa navegação e criação de ramos.
+## Práticas adotadas
+
+
+- Uso de DTOs para a API
+- Injeção de Dependências
+- Arquitetura hexagonal
+- Utilização de dockers para compilação do projeto
+
+## Escalabilidade de sistema:
+
+- [Modularização em Containner e Docker](https://about.gitlab.com/): Docker é uma plataforma de código aberto que facilita a criação, implantação e gerenciamento de aplicativos por meio de contêineres, que são ambientes isolados e leves. Esses contêineres empacotam aplicativos e suas dependências, permitindo uma execução consistente em diversos sistemas, eliminando problemas de compatibilidade e melhorando a eficiência no desenvolvimento.
+
+- [CI](https://about.gitlab.com/) (Continuous Integration):  CI (Continuous Integration) é uma prática de desenvolvimento em que as alterações de código são regularmente integradas e testadas automaticamente. O GitLab CI automatiza esse processo, organizando-o em pipelines, que representam as etapas de construção, teste e implantação de um aplicativo. Isso melhora a eficiência e a qualidade do desenvolvimento de software.[Veja pipeline executada](https://gitlab.com/mattec1/grupo-44-sistema-de-parquimetro-fiap/-/jobs/5473301001)
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap.git
-git branch -M main
-git push -uf origin main
+###############################################
+##### Pipeline Gitlab-CI - v1.0           #####
+##### MATTEC PROJETOS  - 13/03/2024       #####
+##### GRUPO 44 LOCACAO HACKATHON FIAP     #####
+###############################################
+
+
+stages:
+  - teste
+  - build
+  - deploy
+
+
+executar_teste:
+  stage: teste
+  before_script:
+    - echo "Preparando testes..."
+    - chmod +x ./script.sh
+  script:
+    - ./script.sh
+  after_script:
+    - echo "Apagando arquivos temporários..."
+
+executar_teste2:
+  image: node:19.1
+  needs:
+    - executar_teste
+  stage: teste
+  script:
+    - echo "Executando mais um teste..."
+    - npm version
+
+criar_imagens:
+  stage: build
+  script:
+    - echo "Criando as imagens..."
+
+push_imagens:
+  needs:
+    - criar_imagens
+  stage: build
+  script:
+    echo "Realizando upload das imagens..."
+
+kubernetes:
+  stage: deploy
+  script:
+    - echo "Executando deploy..."
+
+
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap/-/settings/integrations)
+## Como Executar
 
-## Collaborate with your team
+### Localmente
+- Clonar repositório git
+- Construir o projeto:
+```
+./mvnw clean package
+```
+- Executar:
+- -  Microserviço Usuario:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- - - A API poderá ser acessada em [localhost:8080](http://localhost:8080)
 
-## Test and Deploy
+- - - O Swagger poderá ser visualizado em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-Use the built-in continuous integration in GitLab.
+- - Microserviço Estoque:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- - - A API poderá ser acessada em [localhost:8081](http://localhost:8081)
 
-***
+- - -O Swagger poderá ser visualizado em [localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
 
-# Editing this README
+- - Microserviço Carrinho:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- - - A API poderá ser acessada em [localhost:8082](http://localhost:8082)
 
-## Suggestions for a good README
+- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- - Microserviço Pedidos:
+- - - A API poderá ser acessada em [localhost:8083](http://localhost:8083)
 
-## Name
-Choose a self-explaining name for your project.
+- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://localhost:8083/swagger-ui.html)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+<h1 align="center">
+  MICROSERVIÇO USUARIO (MS_USER)
+</h1>
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+<p align="center">
+ https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap
+</p>
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Este microserviço deve ser considerado a porta de entrada para todo sistema, é por ele que toda parte de autenticação, autorização e controle de usuários será feita.
+## API Endpoints
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### Cadastro de usuario (CUSTOMER)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Neste endpoint envia-se nome completo do usuario, o acesso e a senha e  ele retorna as informações cadastrais mais um jwt gerado  que possui as informações como nivel de acesso permissões e as autorizações de usuario;
+Apenas usuarios Administradores, ou seja, apenas as pessoas que possuem ROLE_ADMINISTRATOR conseguirão acessar o endpoint de cadastro, caso contrario o sistema retornará erro 403.
+Os niveis de acesso foram separados em tres:
+- ROLE_CUSTOMER
+- ROLE_ADMINISTRATOR
+- ROLE_ASSISTANT_ADMINISTRATOR
+```
+Requet:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+curl --request POST \
+  --url http://localhost:8080/api/v1/customers \
+  --header 'Content-Type: application/json' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	  
+	"name": "Herick da Silva Sauros",
+  "username_or_email": "herick@hotmail.com",
+	"password": "987654321",
+  "repeatedPassword": "987654321"
+}
+'
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Response:
 
-## License
-For open source projects, say how it is licensed.
+{
+    "id": 1,
+    "username": "herick@hotmail.com",
+    "name": "Herick da Silva Sauros",
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20i
+    LCJpYXQiOjE3MTA4MTM0MDQsImV4cCI6MTcxMDgxNTIwNCwicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuY
+    W1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRU
+    FEX01ZX1BST0ZJTEUifV19.eKE9tdwfGhLe3aVP8m5R4dEHtmWi0V15Jz1FCnz_2Sc"
+}
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+Json retornado JWT:
+{
+  "sub": "herick@hotmail.com",
+  "iat": 1710813404,
+  "exp": 1710815204,
+  "role": "ROLE_CUSTOMER",
+  "name": "Herick da Silva Sauros",
+  "authorities": [
+    {
+      "authority": "READ_MY_PROFILE"
+    }
+  ]
+}
+        
+```
+
+
+
+### Login (Customer authenticate):
+Assim que o suario realiza o processo de login o mesmo recebe um token de acesso que deverá ser usado nas demais requisições
+```
+Request:
+curl --request POST \
+  --url http://localhost:8080/api/v1/auth/authenticate \
+  --header 'Content-Type: application/json' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+  "username": "herick@hotmail.com",
+	"password": "987654321"
+}
+'
+
+Response:
+{
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ
+    oZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA5ODEwMDUsImV4cCI
+    6MTcxMDk4MjgwNSwicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjo
+    iSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJ
+    hdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.xaoACQrvGxZcW1
+    bVcRE-3yKnoUw_dd1e6P9Yr5SlRtM"
+}
+```
+
+### Validate token:
+Para controle de sessão de usuario validando que o token esta ativo e autorizado foi criado este endpoint que retorna um Booleano validando se token está ativo. O tempo estimado para cada token é de 1 minuto.Este endpoint é usado pelos demais microserviços como carrinho, estoque e pedido.
+
+```
+http GET http://localhost:8080/api/v1/enderecos/buscar-todos
+
+Request:
+
+curl --location 'http://localhost:8080/api/v1/enderecos/buscar-todos' \
+--data ''
+
+Response:
+{
+    "data": [
+        {
+            "id": 1,
+            "rua": "Rua das Flores",
+            "numero": 123,
+            "bairro": "Centro",
+            "cidade": "São Paulo",
+            "estado": "SP",
+            "cep": "01234-567"
+        }
+    ],
+    "paginator": {
+        "pageNumber": 0,
+        "totalElements": 1,
+        "totalPages": 1
+    }
+}
+
+
+```
+
+<h1 align="center">
+  MICROSERVIÇO ESTOQUE 
+</h1>
+
+<p align="center">
+ https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap
+</p>
+```
+Após descorrermos sobre o microserviço de usuarios agora veremos sobre o microserviço de estoque, que possui endpoints gerenciais de estoque os quais  são exclusivos para administradores
+
+## API Endpoints
+
+
+### Cadastro de produtos
+O cadastro assim como os demais endpoints necessita o envio do token obtido no login de usuario . Para cadastrar o produto é obrigatorio o preenchimento de nome, quantidade em estoque e valor unitario
+
+```
+Request:
+curl --request POST \
+    --url http://localhost:8081/produto \
+    --header 'Content-Type: application/json' \
+    --header 'User-Agent: Insomnia/2023.5.7' \
+    --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+    --data '{
+    "descricao": "Produto B",
+    "quantidadeEstoque": 10,
+    "valorUnitario": 50.5
+}
+'
+
+Response:
+{
+    "id": 3,
+    "descricao": "Produto B",
+    "quantidadeEstoque": 10,
+    "valorUnitario": 50.5
+}
+```
+
+### Atualização de produtos
+Na atualização de produtos todos os atributos exceto o id poderão ser modificados.
+```
+curl --location --request PUT 'http://localhost:8080/api/v1/localidades/1' \
+--header 'Content-Type: application/json' \
+--data '{
+  "id": 1,
+  "nome": "Localidade Teste update",
+  "enderecoDTO": {
+    "id": 1
+  },
+  "idsAmenidades": [1, 2, 3]
+}
+'
+```
+
+### Deletar produtos
+Para realizar a deleção basta completar url com o identificador do produto a ser deletado. Ao deletar retorna codigo 204.
+
+```
+curl --request DELETE \
+  --url http://localhost:8081/produto/2 \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517                  
+```
+### Listar Customers:
+Ao listar os resultados são exibidos de forma paginada.
+```
+Request:
+curl --request GET \
+  --url http://localhost:8081/produto \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
+'
+
+Response:
+     {
+	"content": [
+		{
+			"id": 3,
+			"descricao": "Produto B",
+			"quantidadeEstoque": 10,
+			"valorUnitario": 50.5
+		}
+	],
+	"pageable": {
+		"pageNumber": 0,
+		"pageSize": 10,
+		"sort": {
+			"empty": true,
+			"sorted": false,
+			"unsorted": true
+		},
+		"offset": 0,
+		"paged": true,
+		"unpaged": false
+	},
+	"last": true,
+	"totalPages": 1,
+	"totalElements": 1,
+	"first": true,
+	"numberOfElements": 1,
+	"size": 10,
+	"number": 0,
+	"sort": {
+		"empty": true,
+		"sorted": false,
+		"unsorted": true
+	},
+	"empty": false
+}               
+```
+### Busca por ID
+
+```
+Request:
+curl --request GET \
+      --url http://localhost:8081/produto/3 \
+      --header 'Content-Type: application/json' \
+      --header 'User-Agent: Insomnia/2023.5.7' \
+      --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
+
+Response:
+{
+    "id": 3,
+    "descricao": "Produto B",
+    "quantidadeEstoque": 10,
+    "valorUnitario": 50.5
+}
+
+```
+<h1 align="center">
+  MICROSERVIÇO CARRINHO 
+</h1>
+
+<p align="center">
+ https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap
+</p>
+
+Diferentemente do microserviço anterior que era um microserviço gerencial restrito a administradores este fica acessivel a todos usuarios cadastrados, no entanto ainda necessita do envio do token capturado no login
+
+## API Endpoints
+
+### Inserção de itens no carrinho:
+Neste endpoint na requisição enviamos apenas o id do produto que  será adicionado e a quantidade deste produto. Ao realizar a requisição o sistema  pelo id do produto busca as informações do produto na base de estoque e baseado nela multiplica o valor unitario do produto em estoque pela quantidade solicitada encontrando o valor proporcional a quantidade selecionada pelo usuario. Posteriormente o sistema extrai o email de usuario do token de autenticação e finalmente registra o item no carrinho.
+```
+Request:
+curl --request POST \
+  --url http://localhost:8082/carrinho \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+  "idProduto": 3,
+  "quantidade": 5
+}'
+'
+
+Response:
+{
+    "id": 1,
+    "idProduto": 3,
+    "emailUsuario": "herick@hotmail.com",
+    "quantidade": 5,
+    "valor": 252.5
+}
+```
+### Atualização de quantidade de itens
+De mesmo modo como explicado no endpoint anterior, ao atualizar a quantidade o sistema atualizará tambem o valor total do item proporcionalmente a quantidade.
+```
+Request:
+curl --request PATCH \
+  --url http://localhost:8082/carrinho/atualizaqtde/1/5 \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
+  
+Response:
+{
+    "id": 1,
+    "idProduto": 3,
+    "emailUsuario": "herick@hotmail.com",
+    "quantidade": 5,
+    "valor": 252.5
+}
+```
+
+### Listar itens
+```
+Request:
+curl --request GET \
+  --url 'http://localhost:8082/carrinho?email_usuario=herick%40hotmail.com' \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
+
+Response:
+{
+	"content": [
+		{
+			"id": 1,
+			"idProduto": 3,
+			"emailUsuario": "herick@hotmail.com",
+			"quantidade": 5,
+			"valor": 252.5
+		}
+	],
+	"pageable": {
+		"pageNumber": 0,
+		"pageSize": 10,
+		"sort": {
+			"empty": true,
+			"sorted": false,
+			"unsorted": true
+		},
+		"offset": 0,
+		"unpaged": false,
+		"paged": true
+	},
+	"last": true,
+	"totalElements": 1,
+	"totalPages": 1,
+	"size": 10,
+	"number": 0,
+	"sort": {
+		"empty": true,
+		"sorted": false,
+		"unsorted": true
+	},
+	"numberOfElements": 1,
+	"first": true,
+	"empty": false
+}      
+```

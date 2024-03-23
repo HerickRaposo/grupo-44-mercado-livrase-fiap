@@ -15,7 +15,6 @@ public class ProdutoDTO {
     private Long id;
     @NotNull(message = "Descrição não pode ser nula")
     private String descricao;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Quantidade de produtos em estoque não deve ser nula")
     private Long quantidadeEstoque;
     @Positive(message = "Valor deve ser maior que zero")

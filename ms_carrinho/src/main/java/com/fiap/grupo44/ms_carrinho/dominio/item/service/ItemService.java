@@ -1,5 +1,6 @@
 package com.fiap.grupo44.ms_carrinho.dominio.item.service;
 
+import com.fiap.grupo44.ms_carrinho.adapters.out.ServiceEstoqueOut;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.entity.Item;
 import com.fiap.grupo44.ms_carrinho.dominio.item.repository.ItemRepository;
@@ -11,18 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import io.jsonwebtoken.Jwts;
+import org.springframework.util.StringUtils;
+
+import static org.springframework.cache.interceptor.SimpleKeyGenerator.generateKey;
 
 @Service
 public class ItemService {
     @Autowired
     private ItemRepository repo;
+
+    @Autowired
+    private ServiceEstoqueOut serviceEstoqueOut;
+    @Autowired
+    private DecodeTokenService decodeTokenService;
 
 
     public List<String> validate(ItemDTO dto){
@@ -34,10 +50,24 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemDTO> findAll(PageRequest pagina) {
-        var listaItens = repo.findAll(pagina);
-        //TODO: Implementar função que busca informações do item e que  multiplique valor obtido por quantidade
-        return listaItens.map(item ->  new ItemDTO(item));
+    public Page<ItemDTO> findAll(PageRequest pagina,String filtroEmailUsuario) {
+        List<ItemDTO> listaItens = new ArrayList<>();
+        Specification<Item> specification = Specification.where(null);
+        if (!StringUtils.isEmpty(filtroEmailUsuario)) {
+            specification = specification.and((root, query, builder) ->
+                    builder.equal(root.get("emailUsuario"), filtroEmailUsuario));
+        }
+
+        var itens = repo.findAll(specification, pagina);
+
+        for (Item item : itens.getContent()) {
+            ItemDTO itemDTO = new ItemDTO(item);
+            BeanUtils.copyProperties(item, itemDTO);
+            listaItens.add(itemDTO);
+        }
+
+        Page<ItemDTO> pageLocalidadeDTO = new PageImpl<>(listaItens, pagina, itens.getTotalElements());
+        return pageLocalidadeDTO;
     }
 
     @Transactional(readOnly = true)
@@ -47,23 +77,25 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDTO insert(ItemDTO dto) {
+    public ItemDTO insert(ItemDTO dto, String bearerToken) {
         var entity = new Item();
+        dto = processaProdutoEstoque(dto,bearerToken);
+        String username = decodeTokenService.extractUsername(bearerToken);
+        dto.setEmailUsuario(username);
         BeanUtils.copyProperties(dto, entity);
         var itemSaved = repo.save(entity);
         return new ItemDTO(itemSaved);
     }
 
     @Transactional
-    public ItemDTO update(Long id, ItemDTO dto) {
-        try {
-            Item entity = repo.getOne(id);
-            BeanUtils.copyProperties(dto, entity);
-            //TODO: Fazer busca no banco e adicionar quantidade adicionando ou subtraindo valor
-            return new ItemDTO(entity);
-        } catch (EntityNotFoundException e) {
-            throw  new EntityNotFoundException("Item não encontrado, id:" + id);
-        }
+    public ItemDTO updateQuantidade(Long id, Long novaQuantidade) {
+        Item item = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item não encontrado"));
+        Double valorUnit = item.getValor() / item.getQuantidade();
+        item.setQuantidade(novaQuantidade);
+        item.setValor(valorUnit * novaQuantidade);
+        var itemSaved = repo.save(item);
+        return new ItemDTO(itemSaved);
     }
 
     public void delete(Long id) {
@@ -74,6 +106,12 @@ public class ItemService {
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Violação de integridade da base");
         }
+    }
 
+    private ItemDTO processaProdutoEstoque(ItemDTO item, String bearerToken){
+        var produto = serviceEstoqueOut.buscarInformacoesProduto(item,bearerToken);
+        item.setIdProduto(produto.getId());
+        item.setValor(produto.getValorUnitario() * item.getQuantidade());
+        return item;
     }
 }

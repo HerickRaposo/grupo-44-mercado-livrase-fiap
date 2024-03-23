@@ -10,7 +10,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://ms-estoque-db:3308/ms_estoque?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=America/Sao_Paulo # Corrigido o nome do serviço
+      - SPRING_DATASOURCE_URL=jdbc:mysql://ms-estoque-db:3306/ms_estoque?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=America/Sao_Paulo # Corrigido o nome do serviço
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
     depends_on:
@@ -24,4 +24,4 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=grupo44
     ports:
-      - "3308:3308"
+      - "3307:3306"
