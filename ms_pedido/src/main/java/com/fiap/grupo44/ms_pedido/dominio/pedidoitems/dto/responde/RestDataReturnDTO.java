@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class RestDataReturnDTO {
 	private Object data;
-	private String mensagem;
 	
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+	private String mensagem;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Paginator paginator;
     
+    public RestDataReturnDTO(Object data) {
+ 		this.data      = data;
+ 	}
     
     public RestDataReturnDTO(Object data,String mensagem) {
 		this.data      = data;

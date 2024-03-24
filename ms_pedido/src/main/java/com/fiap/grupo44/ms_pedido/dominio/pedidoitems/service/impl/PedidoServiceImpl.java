@@ -1,9 +1,11 @@
 package com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +25,14 @@ import jakarta.transaction.Transactional;
 @Service
 public class PedidoServiceImpl implements PedidoService{
 	
-	private @Autowired PedidoRepository PedidoRepository;
+	private @Autowired PedidoRepository pedidoRepository;
 	private @Autowired ItensPedidoService itensPedidoService;
 	
 	@Transactional
 	@Override
 	public RestDataReturnDTO salvar(PedidoDTOin pedidoDTOin) {
 		//001. PERSISTIR O PEDIDO
-		Pedido pedido = this.PedidoRepository.save(pedidoDTOin.getEntity());
+		Pedido pedido = this.pedidoRepository.save(pedidoDTOin.getEntity());
 
 		//002. INVOCAR O SALVAR DO PEDIDO ITENS
 		PedidoDTOout pedidoItensDTO = this.itensPedidoService.salvar(pedidoDTOin.getItensPedido(), pedido);
@@ -53,7 +55,7 @@ public class PedidoServiceImpl implements PedidoService{
 	@Override
 	public RestDataReturnDTO buscarPorId(Long id) {
 		try {
-			 Optional<Pedido> OPedido = this.PedidoRepository.findById(id);
+			 Optional<Pedido> OPedido = this.pedidoRepository.findById(id);
 			 Pedido pedido = OPedido.get();
 			 PedidoDTOout pedidoDTOout = new PedidoDTOout(pedido);
 
@@ -70,7 +72,28 @@ public class PedidoServiceImpl implements PedidoService{
 
 	@Override
 	public RestDataReturnDTO buscarTodos(PageRequest pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Page<Pedido> pedidoPage = this.pedidoRepository.findAll(pageRequest);
+		
+		List<PedidoDTOout> pedidoDTOouts=new ArrayList<PedidoDTOout>();
+		
+		PedidoDTOout pedidoDTOout;
+		
+		if(!pedidoPage.isEmpty()) {
+			
+			List<Pedido> pedidosItens = pedidoPage.getContent();
+			for (Pedido pedido : pedidosItens) {
+				
+				pedidoDTOout=new PedidoDTOout(pedido,itensPedidoService);
+				
+
+				
+				pedidoDTOouts.add(pedidoDTOout);
+				
+			}
+			
+		}
+		
+		
+		return new RestDataReturnDTO(pedidoDTOouts);
 	}
 }

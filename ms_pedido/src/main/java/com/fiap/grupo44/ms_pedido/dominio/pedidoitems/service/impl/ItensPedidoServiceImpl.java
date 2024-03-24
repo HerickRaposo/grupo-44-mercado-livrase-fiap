@@ -44,19 +44,6 @@ public class ItensPedidoServiceImpl implements ItensPedidoService{
 	}
 
 	@Override
-	public ItensPedidoDTOout atualizar(ItensPedidoDTOin itensPedidoDTOin, Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String apagar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
 	public List<ItensPedido> buscarItensPorPedido(Long idPedido) {
 		List<ItensPedido> ItensPedido = this.itensPedidoRepository.BUSCAR_ITENS_POR_PEDIDO(idPedido);
 		return ItensPedido;
