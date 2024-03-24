@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDTO {private Long id;
+public class ItemDTO {
+    private Long id;
     @NotNull(message = "ID do produto não pode ser nulo")
     private Long idProduto;
-    private Long idUsuario;
+    private String emailUsuario;
     @NotNull(message = "Quantidade não pode ser nula")
     private Long quantidade;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -22,7 +23,7 @@ public class ItemDTO {private Long id;
     public ItemDTO(Item entity){
         this.id = entity.getId();
         this.idProduto = entity.getIdProduto();
-        this.idUsuario = entity.getIdUsuario();
+        this.emailUsuario = entity.getEmailUsuario();
         this.quantidade = entity.getQuantidade();;
         this.valor = entity.getValor();
     }

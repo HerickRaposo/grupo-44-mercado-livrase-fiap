@@ -37,41 +37,29 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public RegisteredUser registerOneCustomer(SaveUser newUser) {
-        RegisteredUser userDto = new RegisteredUser();
-        try {
-
-            return getRegisteredUser(userService.registerOneCustomer(newUser), userDto);
-        }catch (DataIntegrityViolationException e){
-//            System.out.println(e);
-            throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
-
-        }
+        return getGenericUser(userService.registerOneCustomer(newUser));
 
     }
 
-    public RegisteredUser registerOneROLE_ADMINISTRATOR(SaveUser newUser) {
+    private RegisteredUser getGenericUser(User userService) {
         RegisteredUser userDto = new RegisteredUser();
         try {
 
-            return getRegisteredUser(userService.registerOneROLE_ADMINISTRATOR(newUser), userDto);
-        }catch (DataIntegrityViolationException e){
+            return getRegisteredUser(userService, userDto);
+        } catch (DataIntegrityViolationException e) {
 //            System.out.println(e);
             throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
 
         }
+    }
+
+    public RegisteredUser registerOneROLE_ADMINISTRATOR(SaveUser newUser) {
+        return getGenericUser(userService.registerOneROLE_ADMINISTRATOR(newUser));
 
     }
 
     public RegisteredUser registerOneOneRoleAssitentAdministrator(SaveUser newUser) {
-        RegisteredUser userDto = new RegisteredUser();
-        try {
-
-            return getRegisteredUser(userService.registerOneRoleAssitentAdministrator(newUser), userDto);
-        }catch (DataIntegrityViolationException e){
-//            System.out.println(e);
-            throw new DataIntegrityViolationException("Usuário já cadastrado na base ");
-
-        }
+        return getGenericUser(userService.registerOneRoleAssitentAdministrator(newUser));
 
     }
 
