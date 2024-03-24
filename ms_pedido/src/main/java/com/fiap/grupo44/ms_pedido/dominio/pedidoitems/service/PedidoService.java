@@ -12,6 +12,6 @@ public interface PedidoService {
 	RestDataReturnDTO salvar(PedidoDTOin pedidoDTOin);
 	PedidoDTOout atualizar(PedidoDTOin pedidoDTOin,Long id);
 	String apagar(Long id);
-	PedidoDTOout buscarPorId(Long id);
+	RestDataReturnDTO buscarPorId(Long id);
 	RestDataReturnDTO buscarTodos(PageRequest pageRequest);
 }

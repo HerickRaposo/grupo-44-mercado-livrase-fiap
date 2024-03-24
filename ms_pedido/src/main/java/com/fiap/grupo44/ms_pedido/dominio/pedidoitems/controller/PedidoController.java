@@ -48,9 +48,9 @@ public class PedidoController {
 	}
 	
 	@GetMapping("/buscarPorId")
-	public ResponseEntity<PedidoDTOout> getID(@RequestParam Long id) {
-		 PedidoDTOout pedidoDTO = this.pedidoService.buscarPorId(id);
-		return ResponseEntity.status(HttpStatus.FOUND).body(pedidoDTO); 
+	public ResponseEntity<RestDataReturnDTO> getID(@RequestParam Long idPedido) {
+		RestDataReturnDTO restDataReturnDTO = this.pedidoService.buscarPorId(idPedido);
+		return ResponseEntity.status(HttpStatus.FOUND).body(restDataReturnDTO); 
 	}
 	
 	@GetMapping("/buscar-todos")

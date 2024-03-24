@@ -1,13 +1,19 @@
 package com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.ItensPedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.exceptions.ControllerNotFoundException;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.PedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.ItensPedidoService;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
@@ -45,9 +51,21 @@ public class PedidoServiceImpl implements PedidoService{
 	}
 
 	@Override
-	public PedidoDTOout buscarPorId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public RestDataReturnDTO buscarPorId(Long id) {
+		try {
+			 Optional<Pedido> OPedido = this.PedidoRepository.findById(id);
+			 Pedido pedido = OPedido.get();
+			 PedidoDTOout pedidoDTOout = new PedidoDTOout(pedido);
+
+			 List<ItensPedido> ItensPedido = this.itensPedidoService.buscarItensPorPedido(id);
+			 for (ItensPedido o : ItensPedido) {
+				 pedidoDTOout.getItensPedido().add(new ItensPedidoDTOout(o));
+			 }
+			 
+			 return new RestDataReturnDTO(pedidoDTOout, "Buscar efetivada com sucesso!");
+		}catch(Exception e) {
+			throw new ControllerNotFoundException("Registo não encontrado, id: " + id);			
+		}
 	}
 
 	@Override

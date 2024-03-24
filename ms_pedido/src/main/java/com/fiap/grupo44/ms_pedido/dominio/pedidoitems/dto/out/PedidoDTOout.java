@@ -27,9 +27,10 @@ public class PedidoDTOout {
 	private FormaPagamento formaPagamento;
     private EstadoPedido estadoPedido;
 	private String emailUsuario;
+	
 	private List<ItensPedidoDTOout> itensPedido=new ArrayList<ItensPedidoDTOout>();
 	
 	public PedidoDTOout(Pedido pedido) {
 		BeanUtils.copyProperties(pedido, this);
-	}
+	} 
 }

@@ -5,13 +5,11 @@ import java.math.RoundingMode;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ItensPedidoDTOin;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.ItensPedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
-import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.ItensPedidoRepository;
@@ -57,16 +55,11 @@ public class ItensPedidoServiceImpl implements ItensPedidoService{
 		return null;
 	}
 
-	@Override
-	public ItensPedidoDTOout buscarPorId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public RestDataReturnDTO buscarTodos(PageRequest pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ItensPedido> buscarItensPorPedido(Long idPedido) {
+		List<ItensPedido> ItensPedido = this.itensPedidoRepository.BUSCAR_ITENS_POR_PEDIDO(idPedido);
+		return ItensPedido;
 	}
 
 }
