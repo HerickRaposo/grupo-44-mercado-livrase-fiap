@@ -24,4 +24,4 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - MYSQL_DATABASE=grupo44
     ports:
-      - "3308:3306"
+      - "3309:3306"

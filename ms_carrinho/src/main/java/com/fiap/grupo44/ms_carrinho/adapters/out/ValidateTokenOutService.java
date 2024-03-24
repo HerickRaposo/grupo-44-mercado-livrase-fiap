@@ -15,10 +15,9 @@ public class ValidateTokenOutService {
     private final RestTemplate restTemplate=new RestTemplate();
 
     public Boolean tokenIsActive(String token) {
-        String url = apiHostce;
+        String url = apiHostce + "?jwt=" + token;
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
         ResponseEntity<Boolean> response = restTemplate.exchange(url, HttpMethod.GET, entity, Boolean.class);
         return response.getBody();

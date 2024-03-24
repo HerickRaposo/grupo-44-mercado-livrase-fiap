@@ -31,7 +31,7 @@ public class HttpSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authReqConfig -> {
                     authReqConfig.requestMatchers(HttpMethod.GET, "/produto/listar").permitAll();
-                    authReqConfig.anyRequest().hasRole("ROLE_ADMINISTRATOR");
+                    authReqConfig.anyRequest().hasRole("ADMINISTRATOR");
                 })
                 .build();
 
