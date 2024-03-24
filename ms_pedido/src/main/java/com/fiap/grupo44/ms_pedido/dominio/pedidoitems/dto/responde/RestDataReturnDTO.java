@@ -19,6 +19,11 @@ public class RestDataReturnDTO {
 		this.mensagem  =mensagem;
 	}
     
+    public RestDataReturnDTO(Object data,Paginator paginator) {
+		this.data      = data;
+		this.paginator = paginator;
+	}
+    
 	public RestDataReturnDTO(Object data,String mensagem,Paginator paginator) {
 		this.data      = data;
 		this.paginator = paginator;

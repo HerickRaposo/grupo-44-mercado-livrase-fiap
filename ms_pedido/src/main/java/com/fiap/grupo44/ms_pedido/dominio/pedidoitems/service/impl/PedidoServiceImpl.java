@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.ItensPedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.Paginator;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
@@ -73,27 +74,15 @@ public class PedidoServiceImpl implements PedidoService{
 	@Override
 	public RestDataReturnDTO buscarTodos(PageRequest pageRequest) {
 		Page<Pedido> pedidoPage = this.pedidoRepository.findAll(pageRequest);
-		
 		List<PedidoDTOout> pedidoDTOouts=new ArrayList<PedidoDTOout>();
-		
 		PedidoDTOout pedidoDTOout;
-		
 		if(!pedidoPage.isEmpty()) {
-			
 			List<Pedido> pedidosItens = pedidoPage.getContent();
 			for (Pedido pedido : pedidosItens) {
-				
 				pedidoDTOout=new PedidoDTOout(pedido,itensPedidoService);
-				
-
-				
-				pedidoDTOouts.add(pedidoDTOout);
-				
-			}
-			
+				pedidoDTOouts.add(pedidoDTOout);	
+			}	
 		}
-		
-		
-		return new RestDataReturnDTO(pedidoDTOouts);
+		return new RestDataReturnDTO(pedidoDTOouts,new Paginator(pedidoPage.getNumber(), pedidoPage.getTotalElements(), pedidoPage.getTotalPages()));
 	}
 }

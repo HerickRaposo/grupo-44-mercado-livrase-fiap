@@ -54,8 +54,7 @@ public class PedidoController {
 	}
 	
 	@GetMapping("/buscar-todos")
-	public RestDataReturnDTO getAll(@RequestParam(value = "pagina", defaultValue  = "0")  Integer pagina, 
-			                        @RequestParam(value = "tamanho", defaultValue = "10") Integer tamanho) {
+	public RestDataReturnDTO getAll(@RequestParam(value = "pagina", defaultValue  = "0")  Integer pagina,@RequestParam(value = "tamanho", defaultValue = "10") Integer tamanho) {
 		PageRequest pageRequest = PageRequest.of(pagina,tamanho);
 		return this.pedidoService.buscarTodos(pageRequest);
 	}
