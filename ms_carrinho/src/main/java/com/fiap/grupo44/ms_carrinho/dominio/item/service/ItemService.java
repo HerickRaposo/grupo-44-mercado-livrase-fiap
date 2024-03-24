@@ -38,7 +38,7 @@ public class ItemService {
     @Autowired
     private ServiceEstoqueOut serviceEstoqueOut;
     @Autowired
-    private DecodeTokenService decodeTokenService;
+    private JwtService jwtService;
 
 
     public List<String> validate(ItemDTO dto){
@@ -80,7 +80,7 @@ public class ItemService {
     public ItemDTO insert(ItemDTO dto, String bearerToken) {
         var entity = new Item();
         dto = processaProdutoEstoque(dto,bearerToken);
-        String username = decodeTokenService.extractUsername(bearerToken);
+        String username = jwtService.extractUsername(bearerToken);
         dto.setEmailUsuario(username);
         BeanUtils.copyProperties(dto, entity);
         var itemSaved = repo.save(entity);

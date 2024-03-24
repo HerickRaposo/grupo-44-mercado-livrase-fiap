@@ -23,12 +23,7 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private HttpServletRequest request;
-
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<Page<ProdutoDTO>> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage
@@ -39,14 +34,14 @@ public class ProdutoController {
         return ResponseEntity.ok(produto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/busca/{id}")
     public ResponseEntity<ProdutoDTO> findById(@PathVariable Long id) {
         var produto = produtoService.findById(id);
         return ResponseEntity.ok(produto);
     }
 
 
-    @PostMapping
+    @PostMapping("/cadastro")
     public ResponseEntity insert(@RequestBody ProdutoDTO produtoDTO) {
         List<String> violacoesToList = produtoService.validate(produtoDTO);
         if (!violacoesToList.isEmpty()) {
@@ -57,7 +52,7 @@ public class ProdutoController {
         return ResponseEntity.created(uri).body(produtoSaved);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity update(@RequestBody ProdutoDTO produtoDTO, @PathVariable Long id) {
         List<String> violacoesToList = produtoService.validate(produtoDTO);
         if (!violacoesToList.isEmpty()) {
@@ -67,36 +62,9 @@ public class ProdutoController {
         return  ResponseEntity.ok(usrUpdated);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("deletar/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         produtoService.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private LoginResponseDTO validateToken(String token) {
-        try {
-            // Criar objeto de requisição HTTP
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + token);
-            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
-            // Chamar o endpoint validateToken do ms_user
-            ResponseEntity<LoginResponseDTO> responseEntity = restTemplate.exchange(
-                    "https://blog.syss.com/posts/abusing-ms-office-protos//usuario/validateToken",
-                    HttpMethod.GET,
-                    requestEntity,
-                    LoginResponseDTO.class
-            );
-
-            // Retornar a resposta do endpoint
-            return responseEntity.getBody();
-        } catch (HttpClientErrorException e) {
-            // Tratar a exceção de acordo com o código de erro
-            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                throw new RuntimeException("Token inválido ou expirado");
-            } else {
-                throw new RuntimeException("Erro ao validar o token");
-            }
-        }
     }
 }

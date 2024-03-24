@@ -31,9 +31,5 @@ public class ServiceEstoqueOut {
 		return response.getBody();
 	}
 
-//	public EnderecoResultViaCepDTO populaCep(String cepDTO) {
-//		return this.restTemplate.getForEntity(
-//				apiHostce+cepDTO+json,
-//				EnderecoResultViaCepDTO.class).getBody();
-//	}
+
 }
