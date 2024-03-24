@@ -19,6 +19,7 @@ import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.EstadoPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.exceptions.ControllerNotFoundException;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.ItensPedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.PedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.ItensPedidoService;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
@@ -30,6 +31,7 @@ public class PedidoServiceImpl implements PedidoService{
 	
 	private @Autowired PedidoRepository pedidoRepository;
 	private @Autowired ItensPedidoService itensPedidoService;
+	private @Autowired ItensPedidoRepository itensPedidoRepository;
 	
 	@Transactional
 	@Override
@@ -74,14 +76,27 @@ public class PedidoServiceImpl implements PedidoService{
 
 	@Override
 	public PedidoDTOout atualizar(PedidoDTOin pedidoDTOin, Long id) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
+	@Transactional
 	@Override
-	public String apagar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public RestDataReturnDTO apagar(Long idPedido) {
+		
+		List<ItensPedido> itensPedido = this.itensPedidoService.buscarItensPorPedido(idPedido);
+		if(!itensPedido.isEmpty()) {
+			Pedido pedido=null;
+			for (ItensPedido o : itensPedido) {
+				this.itensPedidoRepository.delete(o);
+				pedido=o.getPedido();
+			}
+			
+			this.pedidoRepository.delete(pedido);
+			return new RestDataReturnDTO("O pedido com o código: "+idPedido+" eliminado com sucesso!");
+		} else{
+			return new RestDataReturnDTO("Pedido com código: "+idPedido +" não encontrado");		
+		}
 	}
 
 	@Override

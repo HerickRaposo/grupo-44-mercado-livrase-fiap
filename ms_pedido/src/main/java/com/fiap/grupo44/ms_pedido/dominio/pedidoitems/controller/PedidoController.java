@@ -21,6 +21,7 @@ import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataRetur
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping(value = "/pedido",produces = {"application/json"})
@@ -49,10 +50,13 @@ public class PedidoController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDTO); 
 	}
 	
-	@DeleteMapping("/apagar/{id}")
-	public ResponseEntity<String> apagar(@PathVariable Long id) {
-		String mensagem = this.pedidoService.apagar(id);
-		return ResponseEntity.status(HttpStatus.OK).body(mensagem);
+	@Transactional
+	@DeleteMapping("/apagar")
+	public ResponseEntity<RestDataReturnDTO> apagar(@RequestParam Long idPedido) {
+		
+		System.err.println(idPedido);
+		RestDataReturnDTO restDataReturnDTO = this.pedidoService.apagar(idPedido);
+		return ResponseEntity.status(HttpStatus.OK).body(restDataReturnDTO);
 	}
 	
 	@GetMapping("/buscarPorId")
@@ -62,8 +66,9 @@ public class PedidoController {
 	}
 	
 	@GetMapping("/buscar-todos")
-	public RestDataReturnDTO getAll(@RequestParam(value = "pagina", defaultValue  = "0")  Integer pagina,@RequestParam(value = "tamanho", defaultValue = "10") Integer tamanho) {
-		PageRequest pageRequest = PageRequest.of(pagina,tamanho);
-		return this.pedidoService.buscarTodos(pageRequest);
+	public ResponseEntity<RestDataReturnDTO> getAll(@RequestParam(value = "pagina", defaultValue  = "0")  Integer pagina,@RequestParam(value = "tamanho", defaultValue = "10") Integer tamanho) {
+		 RestDataReturnDTO restDataReturnDTO = this.pedidoService.buscarTodos(PageRequest.of(pagina,tamanho));
+		return ResponseEntity.status(HttpStatus.FOUND).body(restDataReturnDTO); 
+
 	}
 }

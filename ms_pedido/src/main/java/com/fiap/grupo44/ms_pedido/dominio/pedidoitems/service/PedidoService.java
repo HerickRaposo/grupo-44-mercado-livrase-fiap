@@ -11,8 +11,8 @@ import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataRetur
 @Service
 public interface PedidoService {
 	RestDataReturnDTO salvar(PedidoDTOin pedidoDTOin);
-	PedidoDTOout atualizar(PedidoDTOin pedidoDTOin,Long id);
-	String apagar(Long id);
+	PedidoDTOout atualizar(PedidoDTOin pedidoDTOin,Long idPedido);
+	RestDataReturnDTO apagar(Long id);
 	RestDataReturnDTO buscarPorId(Long id);
 	RestDataReturnDTO buscarTodos(PageRequest pageRequest);
 	RestDataReturnDTO validarPagamento(ValidarPagamentoDTO validarPagamentoDTO);

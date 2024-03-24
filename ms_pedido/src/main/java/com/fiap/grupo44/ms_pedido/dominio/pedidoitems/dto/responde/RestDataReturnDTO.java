@@ -3,8 +3,8 @@ package com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class RestDataReturnDTO {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private Object data;
-	
     @JsonInclude(JsonInclude.Include.NON_NULL)
 	private String mensagem;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,6 +13,10 @@ public class RestDataReturnDTO {
     public RestDataReturnDTO(Object data) {
  		this.data      = data;
  	}
+    
+    public RestDataReturnDTO(String mensagem) {
+		this.mensagem  =mensagem;
+	}
     
     public RestDataReturnDTO(Object data,String mensagem) {
 		this.data      = data;
