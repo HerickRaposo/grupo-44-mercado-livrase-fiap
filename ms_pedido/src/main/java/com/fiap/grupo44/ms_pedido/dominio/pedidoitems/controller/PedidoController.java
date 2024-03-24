@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ValidarPagamentoDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
@@ -34,6 +35,13 @@ public class PedidoController {
 		RestDataReturnDTO restDataReturnDTO = this.pedidoService.salvar(pedidoDTOin);
 		return ResponseEntity.status(HttpStatus.CREATED).body(restDataReturnDTO); 
 	}
+	
+	@PostMapping("/validar-pagamento")
+	public ResponseEntity<RestDataReturnDTO> validarPagamento(@RequestBody ValidarPagamentoDTO validarPagamentoDTO) {
+		RestDataReturnDTO restDataReturnDTO = this.pedidoService.validarPagamento(validarPagamentoDTO);
+		return ResponseEntity.status(HttpStatus.OK).body(restDataReturnDTO); 
+	}
+	
 	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<PedidoDTOout> atualizar(@RequestBody PedidoDTOin pedidoDTOin,@PathVariable Long id) {

@@ -10,12 +10,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ValidarPagamentoDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.ItensPedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.Paginator;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.EstadoPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.exceptions.ControllerNotFoundException;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.PedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.ItensPedidoService;
@@ -40,6 +42,35 @@ public class PedidoServiceImpl implements PedidoService{
 		
 		return new RestDataReturnDTO(pedidoItensDTO, "Pedido efetuado com sucesso!");
 	}
+	
+	@Transactional
+	@Override
+	public RestDataReturnDTO validarPagamento(ValidarPagamentoDTO validarPagamentoDTO) {
+		try {
+			 Optional<Pedido> OPedido = this.pedidoRepository.findById(validarPagamentoDTO.idPedido());
+			 
+			 Pedido pedido = OPedido.get();
+			 System.err.println(!EstadoPedido.CANCELADO.equals(pedido.getEstadoPedido())+" - "+pedido.getEstadoPedido());
+			 
+			 System.err.println(!EstadoPedido.PAGO.equals(pedido.getEstadoPedido()));
+			 if(EstadoPedido.CANCELADO.equals(pedido.getEstadoPedido()))
+				 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
+			   
+				 if(!EstadoPedido.PAGO.equals(pedido.getEstadoPedido())) {
+				   pedido.setDataPagamento(validarPagamentoDTO.dataPagamento());
+				   pedido.setEstadoPedido(EstadoPedido.PAGO);
+				   this.pedidoRepository.save(pedido);
+				   return new RestDataReturnDTO(pedido, "Pagamento do pedido validado com sucesso!");				 
+			   }
+			 
+			 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
+			 
+		}catch(Exception e) {
+			throw new ControllerNotFoundException("Pedido não encontrado, id: " + validarPagamentoDTO.idPedido());			
+		}
+	}
+	
+	
 
 	@Override
 	public PedidoDTOout atualizar(PedidoDTOin pedidoDTOin, Long id) {

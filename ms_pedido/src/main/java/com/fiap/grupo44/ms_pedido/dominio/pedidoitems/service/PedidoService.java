@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ValidarPagamentoDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 
@@ -14,4 +15,5 @@ public interface PedidoService {
 	String apagar(Long id);
 	RestDataReturnDTO buscarPorId(Long id);
 	RestDataReturnDTO buscarTodos(PageRequest pageRequest);
+	RestDataReturnDTO validarPagamento(ValidarPagamentoDTO validarPagamentoDTO);
 }
