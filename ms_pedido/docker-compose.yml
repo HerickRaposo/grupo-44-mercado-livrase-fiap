@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  ms-carrinho-app: # Renomeado para ms-carrinho-app
+    image: openjdk:latest
+    container_name: ms-pedido-app # Renomeado
+    working_dir: /app
+    volumes:
+      - ./target:/app
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://ms-pedido-db:3306/ms_pedido?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=America/Sao_Paulo # Corrigido o nome do serviço
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+    depends_on:
+      - ms-carrinho-db # Renomeado
+    command: ["java", "-jar", "/app/ms_pedido-app.jar"]
+
+  ms-carrinho-db: # Renomeado para ms-carrinho-db
+    image: mysql:8
+    container_name: ms-pedido-db # Renomeado
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=grupo44
+    ports:
+      - "3308:3306"
