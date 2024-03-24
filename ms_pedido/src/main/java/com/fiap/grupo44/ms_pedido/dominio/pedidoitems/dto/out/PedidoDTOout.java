@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.EstadoPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.FormaPagamento;
@@ -21,6 +22,7 @@ public class PedidoDTOout {
 	private Long id;
 	private LocalDate dataPedido;
 	private BigDecimal valorPedido;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
 	private LocalDate dataPagamento;
 	private FormaPagamento formaPagamento;
     private EstadoPedido estadoPedido;

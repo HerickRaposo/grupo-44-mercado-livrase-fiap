@@ -12,12 +12,15 @@ import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.PedidoRepositor
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.ItensPedidoService;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class PedidoServiceImpl implements PedidoService{
 	
 	private @Autowired PedidoRepository PedidoRepository;
 	private @Autowired ItensPedidoService itensPedidoService;
 	
+	@Transactional
 	@Override
 	public RestDataReturnDTO salvar(PedidoDTOin pedidoDTOin) {
 		//001. PERSISTIR O PEDIDO

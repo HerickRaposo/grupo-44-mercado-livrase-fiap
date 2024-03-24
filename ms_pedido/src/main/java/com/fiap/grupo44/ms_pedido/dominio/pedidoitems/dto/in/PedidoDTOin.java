@@ -25,6 +25,7 @@ public class PedidoDTOin {
 	public Pedido getEntity() {
 		Pedido pedido = new Pedido();
 		BeanUtils.copyProperties(this, pedido);
+		pedido.setEstadoPedido(EstadoPedido.AGUARDANDO_PAGAMENTO);
 		return pedido;
 	}
 }

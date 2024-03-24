@@ -47,8 +47,6 @@ public class Pedido {
 	@Enumerated(EnumType.STRING) 
     private EstadoPedido estadoPedido=EstadoPedido.AGUARDANDO_PAGAMENTO;
     
-    @Column(name = "ID_PRODUTO")
-    private Long idProduto;
     @Column(name = "email_usuario",length = 200)
 	private String emailUsuario;
 }
