@@ -10,13 +10,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.PedidoDTOin;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ValidarPagamentoDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.ItensPedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.out.PedidoDTOout;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.Paginator;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.ItensPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity.Pedido;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.EstadoPedido;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.exceptions.ControllerNotFoundException;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.ItensPedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.repository.PedidoRepository;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.ItensPedidoService;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
@@ -28,6 +31,7 @@ public class PedidoServiceImpl implements PedidoService{
 	
 	private @Autowired PedidoRepository pedidoRepository;
 	private @Autowired ItensPedidoService itensPedidoService;
+	private @Autowired ItensPedidoRepository itensPedidoRepository;
 	
 	@Transactional
 	@Override
@@ -40,17 +44,49 @@ public class PedidoServiceImpl implements PedidoService{
 		
 		return new RestDataReturnDTO(pedidoItensDTO, "Pedido efetuado com sucesso!");
 	}
-
+	
+	@Transactional
 	@Override
-	public PedidoDTOout atualizar(PedidoDTOin pedidoDTOin, Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public RestDataReturnDTO validarPagamento(ValidarPagamentoDTO validarPagamentoDTO) {
+		try {
+			 Optional<Pedido> OPedido = this.pedidoRepository.findById(validarPagamentoDTO.idPedido());
+			 
+			 Pedido pedido = OPedido.get();
+			 
+			 if(EstadoPedido.CANCELADO.equals(pedido.getEstadoPedido()))
+				 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
+			   
+				 if(!EstadoPedido.PAGO.equals(pedido.getEstadoPedido())) {
+				   pedido.setDataPagamento(EstadoPedido.PAGO.equals(pedido.getEstadoPedido()) ? validarPagamentoDTO.dataPagamento():null);
+				   pedido.setEstadoPedido(validarPagamentoDTO.estadoPedido());
+				   this.pedidoRepository.save(pedido);
+				   return new RestDataReturnDTO(pedido, "Operação realizada com sucesso");				 
+			   }
+			 
+			 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
+			 
+		}catch(Exception e) {
+			throw new ControllerNotFoundException("Pedido não encontrado, id: " + validarPagamentoDTO.idPedido());			
+		}
 	}
 
+	@Transactional
 	@Override
-	public String apagar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public RestDataReturnDTO apagar(Long idPedido) {
+		
+		List<ItensPedido> itensPedido = this.itensPedidoService.buscarItensPorPedido(idPedido);
+		if(!itensPedido.isEmpty()) {
+			Pedido pedido=null;
+			for (ItensPedido o : itensPedido) {
+				this.itensPedidoRepository.delete(o);
+				pedido=o.getPedido();
+			}
+			
+			this.pedidoRepository.delete(pedido);
+			return new RestDataReturnDTO("O pedido com o código: "+idPedido+" eliminado com sucesso!");
+		} else{
+			return new RestDataReturnDTO("Pedido com código: "+idPedido +" não encontrado");		
+		}
 	}
 
 	@Override
