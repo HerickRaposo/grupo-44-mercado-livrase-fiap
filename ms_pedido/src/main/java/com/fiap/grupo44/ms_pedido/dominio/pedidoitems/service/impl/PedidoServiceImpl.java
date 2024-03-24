@@ -52,17 +52,15 @@ public class PedidoServiceImpl implements PedidoService{
 			 Optional<Pedido> OPedido = this.pedidoRepository.findById(validarPagamentoDTO.idPedido());
 			 
 			 Pedido pedido = OPedido.get();
-			 System.err.println(!EstadoPedido.CANCELADO.equals(pedido.getEstadoPedido())+" - "+pedido.getEstadoPedido());
 			 
-			 System.err.println(!EstadoPedido.PAGO.equals(pedido.getEstadoPedido()));
 			 if(EstadoPedido.CANCELADO.equals(pedido.getEstadoPedido()))
 				 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
 			   
 				 if(!EstadoPedido.PAGO.equals(pedido.getEstadoPedido())) {
-				   pedido.setDataPagamento(validarPagamentoDTO.dataPagamento());
-				   pedido.setEstadoPedido(EstadoPedido.PAGO);
+				   pedido.setDataPagamento(EstadoPedido.PAGO.equals(pedido.getEstadoPedido()) ? validarPagamentoDTO.dataPagamento():null);
+				   pedido.setEstadoPedido(validarPagamentoDTO.estadoPedido());
 				   this.pedidoRepository.save(pedido);
-				   return new RestDataReturnDTO(pedido, "Pagamento do pedido validado com sucesso!");				 
+				   return new RestDataReturnDTO(pedido, "Operação realizada com sucesso");				 
 			   }
 			 
 			 return new RestDataReturnDTO(validarPagamentoDTO, "O pedido já se econtra "+pedido.getEstadoPedido()+" e não pode ser pago.");
@@ -70,14 +68,6 @@ public class PedidoServiceImpl implements PedidoService{
 		}catch(Exception e) {
 			throw new ControllerNotFoundException("Pedido não encontrado, id: " + validarPagamentoDTO.idPedido());			
 		}
-	}
-	
-	
-
-	@Override
-	public PedidoDTOout atualizar(PedidoDTOin pedidoDTOin, Long id) {
-		
-		return null;
 	}
 
 	@Transactional

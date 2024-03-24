@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "04c5556b-149a-4570-88cb-12791f90252e",
+		"name": "MS-PEDIDO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11651276"
+	},
+	"item": [
+		{
+			"name": "BUACAR PEDIDOS PAGINADOS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8086/pedido/buscar-todos?pagina=2&tamanho=10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8086",
+					"path": [
+						"pedido",
+						"buscar-todos"
+					],
+					"query": [
+						{
+							"key": "pagina",
+							"value": "2"
+						},
+						{
+							"key": "tamanho",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BUSCAR PEDIDO POR ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8086/pedido/buscarPorId?idPedido=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8086",
+					"path": [
+						"pedido",
+						"buscarPorId"
+					],
+					"query": [
+						{
+							"key": "idPedido",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SALVAR PEDIDO",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"formaPagamento\": \"PIX\",\r\n    \"emailUsuario\": \"ernesto.sambongo@outlook.com\",\r\n    \"itensPedido\": [\r\n        {\r\n            \"idProduto\": \"10\",\r\n            \"descricao\": \"Iphone 15 pro max\",\r\n            \"quantidade\": \"3\",\r\n            \"valorUnitario\": \"3500\"\r\n        },\r\n        {\r\n            \"idProduto\": \"25\",\r\n            \"descricao\": \"Smart Tv 32 Philco Led Ptv32g23agssblh Android Tv\",\r\n            \"quantidade\": \"1\",\r\n            \"valorUnitario\": \"969\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8086/pedido/salvar",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8086",
+					"path": [
+						"pedido",
+						"salvar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VALIDAR PAGAMENTO",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idPedido\":\"2\",\r\n    \"dataPagamento\":\"2024-03-25\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8086/pedido/validar-pagamento",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8086",
+					"path": [
+						"pedido",
+						"validar-pagamento"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETAR PEDIDO",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8086/pedido/apagar?idPedido=29",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8086",
+					"path": [
+						"pedido",
+						"apagar"
+					],
+					"query": [
+						{
+							"key": "idPedido",
+							"value": "29"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
