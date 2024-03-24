@@ -1,10 +1,6 @@
 package com.fiap.grupo44.ms_pedido.dominio.pedidoitems.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.EstadoPedido;
-import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.enumerations.FormaPagamento;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +30,10 @@ public class ItensPedido {
     private Long quantidade;
 	@Column(name = "VALOR_UNITARIO")
     private BigDecimal valorUnitario;
+	
+	@Column(name = "PRODUTO_ID")
+	private Long idProduto;
+	
     @ManyToOne
     @JoinColumn(name="PEDIDO_ID")
     private Pedido pedido;

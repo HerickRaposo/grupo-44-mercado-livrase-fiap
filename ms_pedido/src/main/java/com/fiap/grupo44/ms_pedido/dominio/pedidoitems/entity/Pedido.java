@@ -20,7 +20,7 @@ import lombok.Setter;
 
 @Data
 @Entity
-@Table(name="PEDIDO")
+@Table(name="TB_PEDIDO")
 @Getter
 @Setter
 public class Pedido {
@@ -30,7 +30,7 @@ public class Pedido {
 	private Long id;
 	
 	@Column(name = "DATA_PEDIDO")
-	private LocalDate dataPedido;
+	private LocalDate dataPedido=LocalDate.now();
 	
 	@Column(name = "VALOR_PEDIDO")
 	private BigDecimal valorPedido;
@@ -44,8 +44,8 @@ public class Pedido {
 	private FormaPagamento formaPagamento;
 	
     @Column(name = "ESTADO_PEDIDO")
-	@Enumerated(EnumType.STRING)
-    private EstadoPedido estadoPedido;
+	@Enumerated(EnumType.STRING) 
+    private EstadoPedido estadoPedido=EstadoPedido.AGUARDANDO_PAGAMENTO;
     
     @Column(name = "ID_PRODUTO")
     private Long idProduto;
