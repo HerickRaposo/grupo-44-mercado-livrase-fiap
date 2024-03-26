@@ -1,4 +1,4 @@
-/*package com.fiap.grupo44.ms_pedido.Config.security.filter;
+package com.fiap.grupo44.ms_pedido.Config.security.filter;
 
 
 import java.io.IOException;
@@ -29,11 +29,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println(request.getRequestURI());
         try {
-            
-        	String token = jwtService.extractToken(request);
+        	String token = request.getHeader("Authorization");
+        	Boolean tokenIsActive = this.validateTokenOutService.tokenIsActive(token);
+        	System.err.println(tokenIsActive);
 
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
+                
+                
                 Boolean isActive = validateTokenOutService.tokenIsActive(token);
                 if (claims != null && Boolean.TRUE.equals(isActive)) {
                     String role = claims.get("role", String.class);
@@ -43,15 +46,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             }
+            
+            
+            filterChain.doFilter(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            //SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
-
-
     }
-}*/
+}
 

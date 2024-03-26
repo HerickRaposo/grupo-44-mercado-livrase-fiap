@@ -125,8 +125,9 @@ public class AuthenticationService {
 
     public boolean validateToken(String jwt) {
         try {
-
+            System.err.println("VALIDAR TOKEN");
             jwtService.extractUsername(jwt);
+            
             return true;
         }catch (Exception e){
             System.out.println(e.getMessage());
