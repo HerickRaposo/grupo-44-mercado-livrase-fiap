@@ -1,9 +1,17 @@
 package com.fiap.grupo44.ms_carrinho.dominio.item.service;
 
 import com.fiap.grupo44.ms_carrinho.adapters.out.ServiceEstoqueOut;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.FecharPedidoDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItensPedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOout;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.ResponsePedidoDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.RestDataReturnDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.entity.Item;
 import com.fiap.grupo44.ms_carrinho.dominio.item.repository.ItemRepository;
+import com.fiap.grupo44.ms_carrinho.dominio.produto.ProdutoResponseDTO;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -38,7 +46,7 @@ public class ItemService {
     @Autowired
     private ServiceEstoqueOut serviceEstoqueOut;
     @Autowired
-    private DecodeTokenService decodeTokenService;
+    private JwtService jwtService;
 
 
     public List<String> validate(ItemDTO dto){
@@ -80,12 +88,48 @@ public class ItemService {
     public ItemDTO insert(ItemDTO dto, String bearerToken) {
         var entity = new Item();
         dto = processaProdutoEstoque(dto,bearerToken);
-        String username = decodeTokenService.extractUsername(bearerToken);
-        dto.setEmailUsuario(username);
+        
+        //String username = jwtService.extractUsername(bearerToken);
+        dto.setEmailUsuario(dto.getEmailUsuario());
         BeanUtils.copyProperties(dto, entity);
+        
         var itemSaved = repo.save(entity);
         return new ItemDTO(itemSaved);
     }
+    
+    @Transactional
+    public RestDataReturnDTO fecharCompra(FecharPedidoDTO fecharPedidoDTO, String bearerToken) {
+        //INVOCAR AQUI O MS-PEDIDO
+    	PedidoDTOin pedidoDTOin=new PedidoDTOin();
+    	pedidoDTOin.setEmailUsuario(fecharPedidoDTO.getEmailUsuario());
+    	pedidoDTOin.setFormaPagamento(fecharPedidoDTO.getFormaPagamento());
+    	List<Item> produtosNoCarrinho = this.repo.BUSCAR_TODOS_PRODUTOS_NO_CARRINHO(fecharPedidoDTO.getEmailUsuario());
+    	if(produtosNoCarrinho.isEmpty())
+    		return new RestDataReturnDTO(pedidoDTOin, "O pedido não pode ser processado. Carrinho vaziu!");
+    		
+    	ItensPedidoDTOin itensPedidoDTOin=null;
+    	for (Item item : produtosNoCarrinho) {
+    		itensPedidoDTOin=new ItensPedidoDTOin();
+    		
+    		itensPedidoDTOin.setDescricao(item.getDescricao());
+    		itensPedidoDTOin.setIdProduto(item.getIdProduto());
+    		itensPedidoDTOin.setQuantidade(item.getQuantidade());
+    		itensPedidoDTOin.setValorUnitario(item.getValor());
+    		
+    		pedidoDTOin.getItensPedido().add(itensPedidoDTOin);
+    		
+    		item.setCompraFechada(true);
+    		this.repo.save(item);
+		}
+    	
+    	//INVOCAR A API DE PEDIDO
+    	ResponsePedidoDTO efetivaCompra = serviceEstoqueOut.efetivaCompra(pedidoDTOin, bearerToken);
+    	
+    	//pedidoDTOin
+        return new RestDataReturnDTO(efetivaCompra.getData(), "Pedido efetuado com sucesso!");
+    } 
+    
+   
 
     @Transactional
     public ItemDTO updateQuantidade(Long id, Long novaQuantidade) {
@@ -111,6 +155,7 @@ public class ItemService {
     private ItemDTO processaProdutoEstoque(ItemDTO item, String bearerToken){
         var produto = serviceEstoqueOut.buscarInformacoesProduto(item,bearerToken);
         item.setIdProduto(produto.getId());
+        item.setDescricao(produto.getDescricao());
         item.setValor(produto.getValorUnitario() * item.getQuantidade());
         return item;
     }

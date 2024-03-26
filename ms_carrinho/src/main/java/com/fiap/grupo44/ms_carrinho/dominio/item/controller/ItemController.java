@@ -1,19 +1,32 @@
 package com.fiap.grupo44.ms_carrinho.dominio.item.controller;
 
-import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
-import com.fiap.grupo44.ms_carrinho.dominio.item.dto.LoginResponseDTO;
-import com.fiap.grupo44.ms_carrinho.dominio.item.service.ItemService;
-import jakarta.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.FecharPedidoDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.RestDataReturnDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.service.ItemService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/carrinho",produces = {"application/json"})
@@ -21,7 +34,7 @@ public class ItemController {
     @Autowired
     private ItemService itemoService;
 
-    private RestTemplate restTemplate;
+    //private RestTemplate restTemplate;
 
     @Autowired
     private HttpServletRequest request;
@@ -53,11 +66,26 @@ public class ItemController {
         if (!violacoesToList.isEmpty()) {
             return ResponseEntity.badRequest().body(violacoesToList);
         }
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
+        String token = request.getHeader("Authorization");
+        System.err.println("PRINT NO CONTROLLER: "+token);
         var produtoSaved = itemoService.insert(itemDTO,token);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand((produtoSaved.getId())).toUri();
         return ResponseEntity.created(uri).body(produtoSaved);
     }
+    
+    
+    @PostMapping("/fechar-compra")
+    public ResponseEntity<RestDataReturnDTO> fecharCompra(@RequestBody FecharPedidoDTO fecharPedidoDTO) {
+    	 String token = request.getHeader("Authorization");
+         System.err.println("PRINT NO CONTROLLER: "+token);
+       
+          RestDataReturnDTO fecharCompra = this.itemoService.fecharCompra(fecharPedidoDTO,token);
+        
+    	return ResponseEntity.status(HttpStatus.CREATED).body(fecharCompra);
+    }
+    
+   
+    
 
     @PatchMapping("atualizaqtde/{id}/{novaQuantidade}")
     public ResponseEntity<?> updateQuantidade(@PathVariable Long id, @PathVariable Long novaQuantidade) {

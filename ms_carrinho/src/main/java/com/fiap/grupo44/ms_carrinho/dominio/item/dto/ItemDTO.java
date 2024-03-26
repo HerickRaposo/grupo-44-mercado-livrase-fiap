@@ -19,6 +19,7 @@ public class ItemDTO {
     private Long quantidade;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Double valor;
+    private String descricao;
 
     public ItemDTO(Item entity){
         this.id = entity.getId();
@@ -26,6 +27,7 @@ public class ItemDTO {
         this.emailUsuario = entity.getEmailUsuario();
         this.quantidade = entity.getQuantidade();;
         this.valor = entity.getValor();
+        this.descricao=entity.getDescricao();
     }
 
 }

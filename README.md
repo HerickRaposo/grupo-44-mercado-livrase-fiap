@@ -144,19 +144,17 @@ kubernetes:
 Este microserviço deve ser considerado a porta de entrada para todo sistema, é por ele que toda parte de autenticação, autorização e controle de usuários será feita.
 ## API Endpoints
 
-### Cadastro de usuario (CUSTOMER)
+A seguir veremos tres endpoints de cadastros de usuarios, embora muito semelhantes cada um cumpre uma função determinada de cadastrar um tipo de usuario podendo ser este CUSTOMER, ADMINISTRATOR e ADMINISTRATOR-ASSIstent. Cadanivel de acesso confere ao portador permissões especificas tanto de leitura, alteração, inclusão e deleção.
+O administrador possui permissão total dentro do sistema, ja o assistente só tem permissão para leitura e atualização de produtos, ja o customer possui apenas permissão de leitura.
+Nestes proximos  endpoint envia-se nome completo do usuario, o acesso e a senha e  ele retorna as informações cadastrais mais um jwt gerado  que possui as informações como nivel de acesso permissões e as autorizações de usuario;
 
-Neste endpoint envia-se nome completo do usuario, o acesso e a senha e  ele retorna as informações cadastrais mais um jwt gerado  que possui as informações como nivel de acesso permissões e as autorizações de usuario;
-Apenas usuarios Administradores, ou seja, apenas as pessoas que possuem ROLE_ADMINISTRATOR conseguirão acessar o endpoint de cadastro, caso contrario o sistema retornará erro 403.
-Os niveis de acesso foram separados em tres:
-- ROLE_CUSTOMER
-- ROLE_ADMINISTRATOR
-- ROLE_ASSISTANT_ADMINISTRATOR
+### Cadastro de usuario (ADMINISTRATOR)
+
 ```
 Requet:
 
 curl --request POST \
-  --url http://localhost:8080/api/v1/customers \
+  --url http://localhost:8080/api/v1/setting/administrator/cadastra_hole \
   --header 'Content-Type: application/json' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
@@ -170,11 +168,147 @@ curl --request POST \
 
 
 Response:
-
 {
     "id": 1,
     "username": "herick@hotmail.com",
     "name": "Herick da Silva Sauros",
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTEyODIzMzIsImV4cCI6MTcxMTI4NDEzMiwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.EBqmvwcrZz4dtieXG-m003cvGacseqHTv6CA1as3Fpg"
+}
+
+
+Json retornado JWT:
+{
+  "sub": "herick@hotmail.com",
+  "iat": 1711283968,
+  "exp": 1711285768,
+  "role": "ROLE_ADMINISTRATOR",
+  "name": "Herick da Silva Sauros",
+  "authorities": [
+    {
+      "authority": "READ_ALL_PRODUCTS"
+    },
+    {
+      "authority": "READ_ONE_PRODUCT"
+    },
+    {
+      "authority": "CREATE_ONE_PRODUCT"
+    },
+    {
+      "authority": "UPDATE_ONE_PRODUCT"
+    },
+    {
+      "authority": "DISABLE_ONE_PRODUCT"
+    },
+    {
+      "authority": "READ_ALL_CATEGORIES"
+    },
+    {
+      "authority": "READ_ONE_CATEGORY"
+    },
+    {
+      "authority": "CREATE_ONE_CATEGORY"
+    },
+    {
+      "authority": "UPDATE_ONE_CATEGORY"
+    },
+    {
+      "authority": "DISABLE_ONE_CATEGORY"
+    },
+    {
+      "authority": "READ_MY_PROFILE"
+    }
+  ]
+}
+        
+```
+
+### Cadastro de usuario (ADMINISTRATOR-ASSISTENT)
+
+```
+Requet:
+
+curl --request POST \
+  --url http://localhost:8080/api/v1/setting/administrator/cadastra_hole_assistent \
+  --header 'Content-Type: application/json' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	  
+	"name": "Marcos Saimpaio",
+  "username_or_email": "marcos@hotmail.com",
+	"password": "987654321",
+  "repeatedPassword": "987654321"
+}
+'
+
+
+Response:
+
+{
+    "id": 2,
+    "username": "marcos@hotmail.com",
+    "name": "Marcos Saimpaio",
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjb3NAaG90bWFpbC5jb20iLCJpYXQiOjE3MTEyODY4MTksImV4cCI6MTcxMTI4ODYxOSwicm9sZSI6IlJPTEVfQVNTSVNUQU5UX0FETUlOSVNUUkFUT1IiLCJuYW1lIjoiTWFyY29zIFNhaW1wYWlvIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJVUERBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlJFQURfQUxMX0NBVEVHT1JJRVMifSx7ImF1dGhvcml0eSI6IlJFQURfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJVUERBVEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.IL4U9ay1AC1A26Tbwbpqi9zX68AR9emKPvHqohtb740"
+}
+
+
+Json retornado JWT:
+{
+  "sub": "marcos@hotmail.com",
+  "iat": 1711286819,
+  "exp": 1711288619,
+  "role": "ROLE_ASSISTANT_ADMINISTRATOR",
+  "name": "Marcos Saimpaio",
+  "authorities": [
+    {
+      "authority": "READ_ALL_PRODUCTS"
+    },
+    {
+      "authority": "READ_ONE_PRODUCT"
+    },
+    {
+      "authority": "UPDATE_ONE_PRODUCT"
+    },
+    {
+      "authority": "READ_ALL_CATEGORIES"
+    },
+    {
+      "authority": "READ_ONE_CATEGORY"
+    },
+    {
+      "authority": "UPDATE_ONE_CATEGORY"
+    },
+    {
+      "authority": "READ_MY_PROFILE"
+    }
+  ]
+}
+        
+```
+### Cadastro de usuario (CUSTOMER)
+
+```
+Requet:
+
+curl --request POST \
+  --url http://localhost:8080/api/v1/customers \
+  --header 'Content-Type: application/json' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	  
+	"name": "Joao da Silva Sauros",
+  "username_or_email": "joao@hotmail.com",
+	"password": "987654321",
+  "repeatedPassword": "987654321"
+}
+'
+
+
+Response:
+
+{
+    "id": 1,
+    "username": "joao@hotmail.com",
+    "name": "joao da Silva Sauros",
     "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20i
     LCJpYXQiOjE3MTA4MTM0MDQsImV4cCI6MTcxMDgxNTIwNCwicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuY
     W1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRU
@@ -184,11 +318,11 @@ Response:
 
 Json retornado JWT:
 {
-  "sub": "herick@hotmail.com",
+  "sub": "joao@hotmail.com",
   "iat": 1710813404,
   "exp": 1710815204,
   "role": "ROLE_CUSTOMER",
-  "name": "Herick da Silva Sauros",
+  "name": "João da Silva Sauros",
   "authorities": [
     {
       "authority": "READ_MY_PROFILE"
@@ -278,40 +412,49 @@ O cadastro assim como os demais endpoints necessita o envio do token obtido no l
 ```
 Request:
 curl --request POST \
-    --url http://localhost:8081/produto \
-    --header 'Content-Type: application/json' \
-    --header 'User-Agent: Insomnia/2023.5.7' \
-    --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
-    --data '{
-    "descricao": "Produto B",
-    "quantidadeEstoque": 10,
-    "valorUnitario": 50.5
-}
-'
+  --url http://localhost:8081/api/v1/produto/cadastro \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.6.1' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	"descricao":"radio",
+	"quantidadeEstoque":10,
+	"valorUnitario":1500.97
+}'
 
 Response:
 {
-    "id": 3,
-    "descricao": "Produto B",
-    "quantidadeEstoque": 10,
-    "valorUnitario": 50.5
+	"id": 4,
+	"descricao": "radio",
+	"quantidadeEstoque": 1,
+	"valorUnitario": 1500.97
 }
 ```
 
 ### Atualização de produtos
 Na atualização de produtos todos os atributos exceto o id poderão ser modificados.
 ```
-curl --location --request PUT 'http://localhost:8080/api/v1/localidades/1' \
---header 'Content-Type: application/json' \
---data '{
-  "id": 1,
-  "nome": "Localidade Teste update",
-  "enderecoDTO": {
-    "id": 1
-  },
-  "idsAmenidades": [1, 2, 3]
+curl --request PUT \
+  --url http://localhost:8081/api/v1/produto/update/4 \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.6.1' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	"descricao":"tc",
+	"quantidadeEstoque":10,
+	"valorUnitario":1500.97
+}'
+
+Response:
+{
+	"id": 4,
+	"descricao": "tv",
+	"quantidadeEstoque": 1,
+	"valorUnitario": 1500.97
 }
-'
+
 ```
 
 ### Deletar produtos
@@ -319,7 +462,8 @@ Para realizar a deleção basta completar url com o identificador do produto a s
 
 ```
 curl --request DELETE \
-  --url http://localhost:8081/produto/2 \
+  --url http://localhost:8081/produto/deletar/2 \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517                  
 ```
@@ -329,19 +473,26 @@ Ao listar os resultados são exibidos de forma paginada.
 Request:
 curl --request GET \
   --url http://localhost:8081/produto \
+ --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
 '
 
 Response:
-     {
+{
 	"content": [
 		{
 			"id": 3,
 			"descricao": "Produto B",
 			"quantidadeEstoque": 10,
 			"valorUnitario": 50.5
+		},
+		{
+			"id": 4,
+			"descricao": "radio",
+			"quantidadeEstoque": 10,
+			"valorUnitario": 1500.97
 		}
 	],
 	"pageable": {
@@ -358,9 +509,7 @@ Response:
 	},
 	"last": true,
 	"totalPages": 1,
-	"totalElements": 1,
-	"first": true,
-	"numberOfElements": 1,
+	"totalElements": 2,
 	"size": 10,
 	"number": 0,
 	"sort": {
@@ -368,15 +517,18 @@ Response:
 		"sorted": false,
 		"unsorted": true
 	},
+	"numberOfElements": 2,
+	"first": true,
 	"empty": false
-}               
+}
 ```
 ### Busca por ID
 
 ```
 Request:
 curl --request GET \
-      --url http://localhost:8081/produto/3 \
+      --url http://localhost:8081/produto/busca/3 \
+       --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
       --header 'Content-Type: application/json' \
       --header 'User-Agent: Insomnia/2023.5.7' \
       --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
@@ -407,24 +559,23 @@ Neste endpoint na requisição enviamos apenas o id do produto que  será adicio
 ```
 Request:
 curl --request POST \
-  --url http://localhost:8082/carrinho \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --url http://localhost:8082//api/v1/carrinho \
+  --header 'Authorization: Bearer Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
-  "idProduto": 3,
-  "quantidade": 5
+  "idProduto": 123,
+  "quantidade": 2
 }'
-'
 
 Response:
 {
-    "id": 1,
-    "idProduto": 3,
-    "emailUsuario": "herick@hotmail.com",
-    "quantidade": 5,
-    "valor": 252.5
+	"timestamp": "2024-03-26T03:23:50.115+00:00",
+	"status": 400,
+	"error": "Bad Request",
+	"message": "No message available",
+	"path": "//api/v1/carrinho"
 }
 ```
 ### Atualização de quantidade de itens
