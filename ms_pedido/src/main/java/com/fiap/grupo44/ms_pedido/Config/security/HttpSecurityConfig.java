@@ -1,7 +1,8 @@
-package com.fiap.ms_estoque.Config.security;
+package com.fiap.grupo44.ms_pedido.Config.security;
 
 
-import com.fiap.ms_estoque.Config.security.filter.JwtAuthenticationFilter;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.fiap.grupo44.ms_pedido.Config.security.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

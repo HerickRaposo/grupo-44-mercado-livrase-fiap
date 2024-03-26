@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  ms-carrinho-app: # Renomeado para ms-carrinho-app
+  ms-pedido-app: # Renomeado para ms-carrinho-app
     image: openjdk:latest
     container_name: ms-pedido-app # Renomeado
     working_dir: /app
@@ -14,10 +14,10 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
     depends_on:
-      - ms-carrinho-db # Renomeado
+      - ms-pedido-db # Renomeado
     command: ["java", "-jar", "/app/ms_pedido-app.jar"]
 
-  ms-carrinho-db: # Renomeado para ms-carrinho-db
+  ms-pedido-db: # Renomeado para ms-carrinho-db
     image: mysql:8
     container_name: ms-pedido-db # Renomeado
     environment:

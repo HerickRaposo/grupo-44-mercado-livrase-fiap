@@ -17,12 +17,10 @@ import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.in.ValidarPagamentoDTO
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.dto.responde.RestDataReturnDTO;
 import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.PedidoService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping(value = "/pedido",produces = {"application/json"})
-@Tag(name = "API Gestão de Pedidos")
 public class PedidoController {
 	
     private @Autowired PedidoService pedidoService;
