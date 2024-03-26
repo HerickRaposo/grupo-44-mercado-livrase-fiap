@@ -1,4 +1,4 @@
-package com.fiap.grupo44.ms_carrinho.config.security;
+/*package com.fiap.grupo44.ms_carrinho.config.security;
 
 
 import com.fiap.grupo44.ms_carrinho.dominio.item.service.JwtService;
@@ -51,4 +51,4 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
-}
+}*/

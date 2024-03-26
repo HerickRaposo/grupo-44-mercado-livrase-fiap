@@ -1,4 +1,4 @@
-package com.fiap.ms_estoque.Config.security;
+/*package com.fiap.ms_estoque.Config.security;
 
 
 import com.fiap.ms_estoque.Config.security.filter.JwtAuthenticationFilter;
@@ -33,4 +33,4 @@ public class HttpSecurityConfig {
 
         return securityFilterChain;
     }
-}
+}*/

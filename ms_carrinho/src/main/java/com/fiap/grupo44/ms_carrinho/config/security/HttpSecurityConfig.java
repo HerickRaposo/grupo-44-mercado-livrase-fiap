@@ -1,4 +1,4 @@
-package com.fiap.grupo44.ms_carrinho.config.security;
+/*package com.fiap.grupo44.ms_carrinho.config.security;
 
 
 import com.fiap.grupo44.ms_carrinho.config.security.filter.JwtAuthenticationFilter;
@@ -34,3 +34,4 @@ public class HttpSecurityConfig {
         return securityFilterChain;
     }
 }
+*/

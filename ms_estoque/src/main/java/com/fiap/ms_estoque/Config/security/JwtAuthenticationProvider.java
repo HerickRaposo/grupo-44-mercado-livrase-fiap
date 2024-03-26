@@ -1,4 +1,4 @@
-package com.fiap.ms_estoque.Config.security;
+/*package com.fiap.ms_estoque.Config.security;
 
 
 import com.fiap.ms_estoque.dominio.produto.service.JwtService;
@@ -52,4 +52,4 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
-}
+}*/

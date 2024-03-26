@@ -53,8 +53,10 @@ public class ItemController {
         if (!violacoesToList.isEmpty()) {
             return ResponseEntity.badRequest().body(violacoesToList);
         }
-        String token = request.getHeader("Authorization").replace("Bearer ", "");
-        var produtoSaved = itemoService.insert(itemDTO,token);
+        //String token = request.getHeader("Authorization").replace("Bearer ", "");
+        //var produtoSaved = itemoService.insert(itemDTO,token);
+        
+        var produtoSaved = itemoService.insert(itemDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand((produtoSaved.getId())).toUri();
         return ResponseEntity.created(uri).body(produtoSaved);
     }
