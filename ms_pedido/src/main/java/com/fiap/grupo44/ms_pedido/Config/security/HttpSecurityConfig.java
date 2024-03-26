@@ -1,4 +1,4 @@
-package com.fiap.grupo44.ms_pedido.Config.security;
+/*package com.fiap.grupo44.ms_pedido.Config.security;
 
 
 
@@ -37,3 +37,4 @@ public class HttpSecurityConfig {
         return securityFilterChain;
     }
 }
+*/

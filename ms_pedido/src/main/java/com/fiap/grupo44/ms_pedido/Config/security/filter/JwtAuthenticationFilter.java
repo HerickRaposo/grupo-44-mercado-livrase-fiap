@@ -1,10 +1,9 @@
-package com.fiap.grupo44.ms_pedido.Config.security.filter;
+/*package com.fiap.grupo44.ms_pedido.Config.security.filter;
 
 
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,7 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println(request.getRequestURI());
         try {
-            String token = jwtService.extractToken(request);
+            
+        	String token = jwtService.extractToken(request);
 
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            SecurityContextHolder.clearContext();
+            //SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -53,5 +53,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     }
-}
+}*/
 

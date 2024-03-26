@@ -1,4 +1,4 @@
-package com.fiap.grupo44.ms_pedido.Config.security;
+/*package com.fiap.grupo44.ms_pedido.Config.security;
 
 
 
@@ -55,4 +55,4 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
-}
+}*/
