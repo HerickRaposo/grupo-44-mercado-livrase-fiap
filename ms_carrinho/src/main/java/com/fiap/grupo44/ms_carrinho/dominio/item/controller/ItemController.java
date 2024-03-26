@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.FecharPedidoDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.RestDataReturnDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.service.ItemService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,11 +75,11 @@ public class ItemController {
     
     
     @PostMapping("/fechar-compra")
-    public ResponseEntity fecharCompra(@RequestBody FecharPedidoDTO fecharPedidoDTO) {
+    public ResponseEntity<RestDataReturnDTO> fecharCompra(@RequestBody FecharPedidoDTO fecharPedidoDTO) {
     	 String token = request.getHeader("Authorization");
          System.err.println("PRINT NO CONTROLLER: "+token);
        
-          PedidoDTOin fecharCompra = this.itemoService.fecharCompra(fecharPedidoDTO,token);
+          RestDataReturnDTO fecharCompra = this.itemoService.fecharCompra(fecharPedidoDTO,token);
         
     	return ResponseEntity.status(HttpStatus.CREATED).body(fecharCompra);
     }

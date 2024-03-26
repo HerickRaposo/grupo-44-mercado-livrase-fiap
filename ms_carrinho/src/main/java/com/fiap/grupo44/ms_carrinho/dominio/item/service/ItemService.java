@@ -5,8 +5,13 @@ import com.fiap.grupo44.ms_carrinho.dominio.item.dto.FecharPedidoDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItensPedidoDTOin;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOout;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.ResponsePedidoDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.RestDataReturnDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.entity.Item;
 import com.fiap.grupo44.ms_carrinho.dominio.item.repository.ItemRepository;
+import com.fiap.grupo44.ms_carrinho.dominio.produto.ProdutoResponseDTO;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -87,18 +92,21 @@ public class ItemService {
         //String username = jwtService.extractUsername(bearerToken);
         dto.setEmailUsuario(dto.getEmailUsuario());
         BeanUtils.copyProperties(dto, entity);
+        
         var itemSaved = repo.save(entity);
         return new ItemDTO(itemSaved);
     }
     
     @Transactional
-    public PedidoDTOin fecharCompra(FecharPedidoDTO fecharPedidoDTO, String bearerToken) {
+    public RestDataReturnDTO fecharCompra(FecharPedidoDTO fecharPedidoDTO, String bearerToken) {
         //INVOCAR AQUI O MS-PEDIDO
     	PedidoDTOin pedidoDTOin=new PedidoDTOin();
     	pedidoDTOin.setEmailUsuario(fecharPedidoDTO.getEmailUsuario());
     	pedidoDTOin.setFormaPagamento(fecharPedidoDTO.getFormaPagamento());
-    	
     	List<Item> produtosNoCarrinho = this.repo.BUSCAR_TODOS_PRODUTOS_NO_CARRINHO(fecharPedidoDTO.getEmailUsuario());
+    	if(produtosNoCarrinho.isEmpty())
+    		return new RestDataReturnDTO(pedidoDTOin, "O pedido não pode ser processado. Carrinho vaziu!");
+    		
     	ItensPedidoDTOin itensPedidoDTOin=null;
     	for (Item item : produtosNoCarrinho) {
     		itensPedidoDTOin=new ItensPedidoDTOin();
@@ -115,9 +123,10 @@ public class ItemService {
 		}
     	
     	//INVOCAR A API DE PEDIDO
-    	serviceEstoqueOut.efetivaCompra(pedidoDTOin, bearerToken);
+    	ResponsePedidoDTO efetivaCompra = serviceEstoqueOut.efetivaCompra(pedidoDTOin, bearerToken);
     	
-        return pedidoDTOin;
+    	//pedidoDTOin
+        return new RestDataReturnDTO(efetivaCompra.getData(), "Pedido efetuado com sucesso!");
     } 
     
    

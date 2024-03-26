@@ -2,6 +2,8 @@ package com.fiap.grupo44.ms_carrinho.adapters.out;
 
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOout;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.rsponse.ResponsePedidoDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.produto.ProdutoResponseDTO;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +39,7 @@ public class ServiceEstoqueOut {
 		return response.getBody();
 	}
 	
-	public ProdutoResponseDTO efetivaCompra(PedidoDTOin pedidoDTOin, String bearerToken) {
+	public ResponsePedidoDTO efetivaCompra(PedidoDTOin pedidoDTOin, String bearerToken) {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", bearerToken);
@@ -47,7 +49,7 @@ public class ServiceEstoqueOut {
 		
 		
 		
-		ResponseEntity<ProdutoResponseDTO> response = restTemplate.exchange(apiHostPedido, HttpMethod.POST, httpEntity, ProdutoResponseDTO.class);
+		ResponseEntity<ResponsePedidoDTO> response = restTemplate.exchange(apiHostPedido, HttpMethod.POST, httpEntity, ResponsePedidoDTO.class);
 		return response.getBody();
 	}
 }

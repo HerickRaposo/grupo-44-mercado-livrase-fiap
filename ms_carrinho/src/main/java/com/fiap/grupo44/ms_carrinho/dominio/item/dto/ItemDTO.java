@@ -27,6 +27,7 @@ public class ItemDTO {
         this.emailUsuario = entity.getEmailUsuario();
         this.quantidade = entity.getQuantidade();;
         this.valor = entity.getValor();
+        this.descricao=entity.getDescricao();
     }
 
 }
