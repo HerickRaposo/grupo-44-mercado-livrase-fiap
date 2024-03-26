@@ -19,4 +19,5 @@ public class Item {
     private Long quantidade;
     private Double valor;
     private boolean compraFechada;
+    private String descricao;
 }

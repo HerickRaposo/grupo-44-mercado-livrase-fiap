@@ -33,6 +33,7 @@ public class ServiceEstoqueOut {
 		HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 		
 		ResponseEntity<ProdutoResponseDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, ProdutoResponseDTO.class);
+		ProdutoResponseDTO body = response.getBody();
 		return response.getBody();
 	}
 	

@@ -103,7 +103,7 @@ public class ItemService {
     	for (Item item : produtosNoCarrinho) {
     		itensPedidoDTOin=new ItensPedidoDTOin();
     		
-    		itensPedidoDTOin.setDescricao("TESTE DE IPHONE");
+    		itensPedidoDTOin.setDescricao(item.getDescricao());
     		itensPedidoDTOin.setIdProduto(item.getIdProduto());
     		itensPedidoDTOin.setQuantidade(item.getQuantidade());
     		itensPedidoDTOin.setValorUnitario(item.getValor());
@@ -143,6 +143,7 @@ public class ItemService {
     private ItemDTO processaProdutoEstoque(ItemDTO item, String bearerToken){
         var produto = serviceEstoqueOut.buscarInformacoesProduto(item,bearerToken);
         item.setIdProduto(produto.getId());
+        item.setDescricao(produto.getDescricao());
         item.setValor(produto.getValorUnitario() * item.getQuantidade());
         return item;
     }
