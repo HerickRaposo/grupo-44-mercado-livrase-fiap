@@ -35,20 +35,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
-                
-                
+
                 Boolean isActive = validateTokenOutService.tokenIsActive(token);
                 if (claims != null && Boolean.TRUE.equals(isActive)) {
-                    String role = claims.get("role", String.class);
-                    System.out.println("Aqui veio a role  " + role);
+                    
+                	String role = claims.get("role", String.class);
+                    
+                    System.out.println("PRINTAR A ROLE: " + role);
                     if (role != null) {
                         filterChain.doFilter(request, response);
                     }
                 }
             }
-            
-            
-            filterChain.doFilter(request, response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
