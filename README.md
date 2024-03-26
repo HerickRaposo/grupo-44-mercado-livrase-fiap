@@ -109,21 +109,21 @@ kubernetes:
 - Executar:
 - -  Microserviço Usuario:
 
-- - - A API poderá ser acessada em [localhost:8080](http://localhost:8080)
+- - - A API poderá ser acessada em [localhost:8080](http://127.0.0.1:8080/)
 
-- - - O Swagger poderá ser visualizado em [localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- - - O Swagger poderá ser visualizado em [localhost:8080/swagger-ui.html](http://127.0.0.1:8080//swagger-ui.html)
 
 - - Microserviço Estoque:
 
-- - - A API poderá ser acessada em [localhost:8081](http://localhost:8081)
+- - - A API poderá ser acessada em [localhost:8081](http://127.0.0.1:8081)
 
-- - -O Swagger poderá ser visualizado em [localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
+- - -O Swagger poderá ser visualizado em [localhost:8081/swagger-ui.html](http://127.0.0.1:8081/swagger-ui.html)
 
 - - Microserviço Carrinho:
 
 - - - A API poderá ser acessada em [localhost:8082](http://localhost:8082)
 
-- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)
+- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://127.0.0.1:8082/swagger-ui.html)
 
 - - Microserviço Pedidos:
 - - - A API poderá ser acessada em [localhost:8083](http://localhost:8083)
@@ -148,13 +148,14 @@ A seguir veremos tres endpoints de cadastros de usuarios, embora muito semelhant
 O administrador possui permissão total dentro do sistema, ja o assistente só tem permissão para leitura e atualização de produtos, ja o customer possui apenas permissão de leitura.
 Nestes proximos  endpoint envia-se nome completo do usuario, o acesso e a senha e  ele retorna as informações cadastrais mais um jwt gerado  que possui as informações como nivel de acesso permissões e as autorizações de usuario;
 
+Para facilitação de testes os endpoints de cadastros ficaram abertoz, mas em ambiente de produção seriam fechados para ADMs
 ### Cadastro de usuario (ADMINISTRATOR)
 
 ```
 Requet:
 
 curl --request POST \
-  --url http://localhost:8080/api/v1/setting/administrator/cadastra_hole \
+  --url http://127.0.0.1:8080//api/v1/setting/administrator/cadastra_hole \
   --header 'Content-Type: application/json' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
@@ -228,7 +229,7 @@ Json retornado JWT:
 Requet:
 
 curl --request POST \
-  --url http://localhost:8080/api/v1/setting/administrator/cadastra_hole_assistent \
+  --url http://127.0.0.1:8080//api/v1/setting/administrator/cadastra_hole_assistent \
   --header 'Content-Type: application/json' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
@@ -290,7 +291,7 @@ Json retornado JWT:
 Requet:
 
 curl --request POST \
-  --url http://localhost:8080/api/v1/customers \
+  --url http://127.0.0.1:8080//api/v1/customers \
   --header 'Content-Type: application/json' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
@@ -339,7 +340,7 @@ Assim que o suario realiza o processo de login o mesmo recebe um token de acesso
 ```
 Request:
 curl --request POST \
-  --url http://localhost:8080/api/v1/auth/authenticate \
+  --url http://127.0.0.1:8080//api/v1/auth/authenticate \
   --header 'Content-Type: application/json' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
@@ -363,11 +364,11 @@ Response:
 Para controle de sessão de usuario validando que o token esta ativo e autorizado foi criado este endpoint que retorna um Booleano validando se token está ativo. O tempo estimado para cada token é de 1 minuto.Este endpoint é usado pelos demais microserviços como carrinho, estoque e pedido.
 
 ```
-http GET http://localhost:8080/api/v1/enderecos/buscar-todos
+http GET http://127.0.0.1:8080//api/v1/enderecos/buscar-todos
 
 Request:
 
-curl --location 'http://localhost:8080/api/v1/enderecos/buscar-todos' \
+curl --location 'http://127.0.0.1:8080//api/v1/enderecos/buscar-todos' \
 --data ''
 
 Response:
@@ -412,8 +413,8 @@ O cadastro assim como os demais endpoints necessita o envio do token obtido no l
 ```
 Request:
 curl --request POST \
-  --url http://localhost:8081/api/v1/produto/cadastro \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --url http://127.0.0.1:8081/api/v1/produto/cadastro \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: insomnia/8.6.1' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
@@ -436,8 +437,8 @@ Response:
 Na atualização de produtos todos os atributos exceto o id poderão ser modificados.
 ```
 curl --request PUT \
-  --url http://localhost:8081/api/v1/produto/update/4 \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --url http://127.0.0.1:8081/api/v1/produto/update/4 \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: insomnia/8.6.1' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
@@ -462,18 +463,18 @@ Para realizar a deleção basta completar url com o identificador do produto a s
 
 ```
 curl --request DELETE \
-  --url http://localhost:8081/produto/deletar/2 \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --url http://127.0.0.1:8081/api/v1/produto/deletar/2 \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517                  
 ```
-### Listar Customers:
+### Listar Produtos:
 Ao listar os resultados são exibidos de forma paginada.
 ```
 Request:
 curl --request GET \
-  --url http://localhost:8081/produto \
- --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --url http://127.0.0.1:8081/api/v1/produto/listar \
+ --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
@@ -527,8 +528,8 @@ Response:
 ```
 Request:
 curl --request GET \
-      --url http://localhost:8081/produto/busca/3 \
-       --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+      --url http://127.0.0.1:8081/api/v1/produto/busca/3 \
+       --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
       --header 'Content-Type: application/json' \
       --header 'User-Agent: Insomnia/2023.5.7' \
       --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
@@ -559,8 +560,8 @@ Neste endpoint na requisição enviamos apenas o id do produto que  será adicio
 ```
 Request:
 curl --request POST \
-  --url http://localhost:8082//api/v1/carrinho \
-  --header 'Authorization: Bearer Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0' \
+  --url http://127.0.0.1:8082/carrinho \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
@@ -583,8 +584,8 @@ De mesmo modo como explicado no endpoint anterior, ao atualizar a quantidade o s
 ```
 Request:
 curl --request PATCH \
-  --url http://localhost:8082/carrinho/atualizaqtde/1/5 \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --url http://127.0.0.1:8082/carrinho/atualizaqtde/1/5 \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
@@ -603,8 +604,8 @@ Response:
 ```
 Request:
 curl --request GET \
-  --url 'http://localhost:8082/carrinho?email_usuario=herick%40hotmail.com' \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --url 'http://127.0.0.1:8082/carrinho?email_usuario=herick%40hotmail.com' \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
 
@@ -645,4 +646,287 @@ Response:
 	"first": true,
 	"empty": false
 }      
+```
+
+### Fechar compras
+Este serviço zera todos os itens existentes no carrinho e invoca o serviço de pedido. Se não houver itens no carrinho a operação não ocorre.
+
+```
+Request:
+curl --request POST \
+  --url http://127.0.0.1:8082/carrinhofechar-compra \
+  --header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: Insomnia/2023.5.7' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+  "emailUsuario":"ernesto.sambongo@outlook.com",
+  "formaPagamento":"PIX"
+}'
+
+Response:
+
+    "data": {
+        "id": 9,
+        "dataPedido": "2024-03-26",
+        "valorPedido": 73996.00,
+        "formaPagamento": "PIX",
+        "estadoPedido": "AGUARDANDO_PAGAMENTO",
+        "emailUsuario": "ernesto.sambongo@outlook.com",
+        "itensPedido": [
+            {
+                "id": 11,
+                "descricao": "Notebook Asus Rog Strix G16 Core I9 16gb 512ssd W11 Rtx 4060 Cor Cinza",
+                "quantidade": 2,
+                "valorUnitario": 29998.0,
+                "idProduto": 4
+            },
+            {
+                "id": 12,
+                "descricao": "Ihpone 15 pro max",
+                "quantidade": 2,
+                "valorUnitario": 7000.0,
+                "idProduto": 1
+            }
+        ]
+    },
+    "mensagem": "Pedido efetuado com sucesso!"
+}
+```
+
+<h1 align="center">
+  MICROSERVIÇO PEDIDO 
+</h1>
+
+<p align="center">
+ https://gitlab.com/mattec1/grupo-44-mercado-livrase-fiap
+</p>
+
+O serviço de pedido é o serviço invocado pelo microserviço de carrinho no fechamento da compra, sendo assim fica responsavel pelo gerenciamento de pedidos efetuados pelos usuarios. Assim como demais todos endpoints necessitam de token valido.
+
+### Salvar pedidos
+Serviço responsavel para submeter o pedido, que por sinal é usado pelo MS-CARRINHO no fecho dos produtos adicionados no carrinho
+
+```
+Request:
+ccurl --location 'http://127.0.0.1:8083/pedido/salvar' \
+--header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "formaPagamento": "PIX",
+    "emailUsuario": "ernesto.sambongo@outlook.com",
+    "itensPedido": [
+        {
+            "idProduto": "10",
+            "descricao": "Iphone 15 pro max",
+            "quantidade": "3",
+            "valorUnitario": "3500"
+        },
+        {
+            "idProduto": "25",
+            "descricao": "Smart Tv 32 Philco Led Ptv32g23agssblh Android Tv",
+            "quantidade": "1",
+            "valorUnitario": "969"
+        }
+    ]
+}'
+
+
+RESPONSE
+{
+    "data": {
+        "id": 10,
+        "dataPedido": "2024-03-26",
+        "valorPedido": 11469.00,
+        "formaPagamento": "PIX",
+        "estadoPedido": "AGUARDANDO_PAGAMENTO",
+        "emailUsuario": "ernesto.sambongo@outlook.com",
+        "itensPedido": [
+            {
+                "id": 13,
+                "descricao": "Iphone 15 pro max",
+                "quantidade": 3,
+                "valorUnitario": 3500,
+                "idProduto": 10
+            },
+            {
+                "id": 14,
+                "descricao": "Smart Tv 32 Philco Led Ptv32g23agssblh Android Tv",
+                "quantidade": 1,
+                "valorUnitario": 969,
+                "idProduto": 25
+            }
+        ]
+    },
+    "mensagem": "Pedido efetuado com sucesso!"
+}
+
+```
+
+
+### Listar pedidos
+
+Serviço responsavel em buscar todos os pedidos na base do recurso de pagination, no caso do exemplo em causa, foi usado a pagina 0 pedindo 3 elementos.
+```
+Request:
+curl --location 'http://127.0.0.1:8083/pedido/buscar-todos?pagina=2&tamanho=10' \
+--header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE'
+
+RESPONSE
+{
+    "data": [
+        {
+            "id": 1,
+            "dataPedido": "2024-03-26",
+            "valorPedido": 59996.00,
+            "formaPagamento": "PIX",
+            "estadoPedido": "AGUARDANDO_PAGAMENTO",
+            "emailUsuario": "ernesto.sambongo@outlook.com",
+            "itensPedido": [
+                {
+                    "id": 1,
+                    "descricao": "Notebook Asus Rog Strix G16 Core I9 16gb 512ssd W11 Rtx 4060 Cor Cinza",
+                    "quantidade": 2,
+                    "valorUnitario": 29998.00,
+                    "idProduto": 4
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "dataPedido": "2024-03-26",
+            "valorPedido": 8196.00,
+            "formaPagamento": "PIX",
+            "estadoPedido": "AGUARDANDO_PAGAMENTO",
+            "emailUsuario": "ernesto.sambongo@outlook.com",
+            "itensPedido": [
+                {
+                    "id": 2,
+                    "descricao": "Smart Tv Led 50 Google Tv Uhd 4k Tcl 50p635 3 Hdmi 1 Usb",
+                    "quantidade": 2,
+                    "valorUnitario": 4098.00,
+                    "idProduto": 3
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "dataPedido": "2024-03-26",
+            "valorPedido": 8196.00,
+            "formaPagamento": "PIX",
+            "estadoPedido": "AGUARDANDO_PAGAMENTO",
+            "emailUsuario": "ernesto.sambongo@outlook.com",
+            "itensPedido": [
+                {
+                    "id": 3,
+                    "descricao": "Smart Tv Led 50 Google Tv Uhd 4k Tcl 50p635 3 Hdmi 1 Usb",
+                    "quantidade": 2,
+                    "valorUnitario": 4098.00,
+                    "idProduto": 3
+                }
+            ]
+        }
+    ],
+    "paginator": {
+        "pageNumber": 0,
+        "totalElements": 10,
+        "totalPages": 4
+    }
+}
+```
+
+
+
+### Buscar pedido por ID
+
+
+O serviço a baixo é responsavel em buscar pedidos por ID do pedido que no caso foi usado no pedido de codigo 8
+```
+Request:
+curl --location 'http://127.0.0.1:8083/pedido/buscarPorId?idPedido=1' \
+--header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE'
+
+RESPONSE
+
+RESPONSE
+{
+    "data": {
+        "id": 8,
+        "dataPedido": "2024-03-26",
+        "valorPedido": 71592.00,
+        "formaPagamento": "PIX",
+        "estadoPedido": "PAGO",
+        "emailUsuario": "ernesto.sambongo@outlook.com",
+        "itensPedido": [
+            {
+                "id": 8,
+                "descricao": "Smart Tv Led 50 Google Tv Uhd 4k Tcl 50p635 3 Hdmi 1 Usb",
+                "quantidade": 2,
+                "valorUnitario": 4098.00,
+                "idProduto": 3
+            },
+            {
+                "id": 9,
+                "descricao": "Mini Geladeira Portátil Veicular 24 Litros 12v Função Aquece",
+                "quantidade": 2,
+                "valorUnitario": 1700.00,
+                "idProduto": 5
+            },
+            {
+                "id": 10,
+                "descricao": "Notebook Asus Rog Strix G16 Core I9 16gb 512ssd W11 Rtx 4060 Cor Cinza",
+                "quantidade": 2,
+                "valorUnitario": 29998.00,
+                "idProduto": 4
+            }
+        ]
+    },
+    "mensagem": "Buscar efetivada com sucesso!"
+}
+
+```
+
+### Valida pagamento pedido
+
+Serviço responsavel em validar o pagamento de um pedido ou cancelar o mesmo por ação do cliente.
+
+```
+Request:
+curl --location 'http://127.0.0.1:8083/pedido/validar-pagamento-ou-cancelar' \
+--header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE' \
+--header 'Content-Type: application/json' \
+--data '{
+    "idPedido":27,
+    "dataPagamento":"2024-03-25",
+    "estadoPedido":"CANCELADO"
+}'
+
+RESPONSE
+{
+    "data": {
+        "id": 6,
+        "dataPedido": "2024-03-26",
+        "valorPedido": 8196.00,
+        "dataPagamento": null,
+        "formaPagamento": "PIX",
+        "estadoPedido": "PAGO",
+        "emailUsuario": "ernesto.sambongo@outlook.com"
+    },
+    "mensagem": "Operação realizada com sucesso"
+}
+```
+
+### Deletar pedido
+
+Serviço abaixo é responsavel em remover um pedido antes feito.
+
+```
+Request:
+curl --location --request DELETE 'http://127.0.0.1:8083/pedido/apagar?idPedido=29' \
+--header 'Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE'
+
+RESPONSE
+{
+    "mensagem": "O pedido com o código: 4 eliminado com sucesso!"
+}
 ```
