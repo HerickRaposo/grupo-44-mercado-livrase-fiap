@@ -1,7 +1,10 @@
 package com.fiap.grupo44.ms_carrinho.dominio.item.service;
 
 import com.fiap.grupo44.ms_carrinho.adapters.out.ServiceEstoqueOut;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.FecharPedidoDTO;
 import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItemDTO;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.ItensPedidoDTOin;
+import com.fiap.grupo44.ms_carrinho.dominio.item.dto.PedidoDTOin;
 import com.fiap.grupo44.ms_carrinho.dominio.item.entity.Item;
 import com.fiap.grupo44.ms_carrinho.dominio.item.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -82,12 +85,37 @@ public class ItemService {
         dto = processaProdutoEstoque(dto,bearerToken);
         
         //String username = jwtService.extractUsername(bearerToken);
-        //TODO - ACERTO COM O NOME DO USUARIO
         dto.setEmailUsuario(dto.getEmailUsuario());
         BeanUtils.copyProperties(dto, entity);
         var itemSaved = repo.save(entity);
         return new ItemDTO(itemSaved);
     }
+    
+    @Transactional
+    public PedidoDTOin fecharCompra(FecharPedidoDTO fecharPedidoDTO, String bearerToken) {
+        //INVOCAR AQUI O MS-PEDIDO
+    	PedidoDTOin pedidoDTOin=new PedidoDTOin();
+    	pedidoDTOin.setEmailUsuario(fecharPedidoDTO.getEmailUsuario());
+    	pedidoDTOin.setFormaPagamento(fecharPedidoDTO.getFormaPagamento());
+    	
+    	List<Item> produtosNoCarrinho = this.repo.BUSCAR_TODOS_PRODUTOS_NO_CARRINHO(fecharPedidoDTO.getEmailUsuario());
+    	ItensPedidoDTOin itensPedidoDTOin=null;
+    	for (Item item : produtosNoCarrinho) {
+    		itensPedidoDTOin=new ItensPedidoDTOin();
+    		
+    		itensPedidoDTOin.setDescricao("TESTE DE IPHONE");
+    		itensPedidoDTOin.setIdProduto(item.getIdProduto());
+    		itensPedidoDTOin.setQuantidade(item.getQuantidade());
+    		itensPedidoDTOin.setValorUnitario(item.getValor());
+    		
+    		pedidoDTOin.getItensPedido().add(itensPedidoDTOin);
+		}
+    	
+    	//INVOCAR A API DE PEDIDO
+    	serviceEstoqueOut.efetivaCompra(pedidoDTOin, bearerToken);
+    	
+        return pedidoDTOin;
+    } 
     
    
 

@@ -18,4 +18,5 @@ public class Item {
     private String emailUsuario;
     private Long quantidade;
     private Double valor;
+    private boolean compraFechada;
 }
