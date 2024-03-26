@@ -28,8 +28,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         System.out.println(request.getRequestURI());
         try {
-            String token = jwtService.extractToken(request);
+            //String token = jwtService.extractToken(request);
+            
+            String token = request.getHeader("Authorization");
+        	Boolean tokenIsActive = this.validateTokenOutService.tokenIsActive(token);
+            
 
+            System.err.println("ESTOU DENTRO DA COISA... "+ token);
+            
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
                 Boolean isActive = validateTokenOutService.tokenIsActive(token);

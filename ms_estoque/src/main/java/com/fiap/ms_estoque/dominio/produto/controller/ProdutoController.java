@@ -1,21 +1,26 @@
 package com.fiap.ms_estoque.dominio.produto.controller;
 
 
-import com.fiap.ms_estoque.dominio.produto.dto.LoginResponseDTO;
-import com.fiap.ms_estoque.dominio.produto.dto.ProdutoDTO;
-import com.fiap.ms_estoque.dominio.produto.service.ProdutoService;
-import jakarta.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import com.fiap.ms_estoque.dominio.produto.dto.ProdutoDTO;
+import com.fiap.ms_estoque.dominio.produto.service.ProdutoService;
 
 @RestController
 @RequestMapping(value = "/produto",produces = {"application/json"})
