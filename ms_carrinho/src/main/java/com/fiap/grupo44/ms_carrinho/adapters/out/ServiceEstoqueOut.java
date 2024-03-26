@@ -24,22 +24,9 @@ public class ServiceEstoqueOut {
 	public ProdutoResponseDTO buscarInformacoesProduto(ItemDTO itemDTO, String bearerToken) {
 		String url = apiHostce + itemDTO.getIdProduto();
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(bearerToken);
+		headers.set("Authorization", bearerToken);
 		HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
 		ResponseEntity<ProdutoResponseDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, ProdutoResponseDTO.class);
 		return response.getBody();
 	}
-	
-	public ProdutoResponseDTO buscarInformacoesProduto(ItemDTO itemDTO) {
-		String url = apiHostce + itemDTO.getIdProduto();
-		HttpHeaders headers = new HttpHeaders();
-		//headers.setBearerAuth(bearerToken);
-		HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
-		ResponseEntity<ProdutoResponseDTO> response = restTemplate.exchange(url, HttpMethod.GET, entity, ProdutoResponseDTO.class);
-		return response.getBody();
-	}
-
-
 }

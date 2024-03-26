@@ -22,18 +22,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private ValidateTokenOutService valiiValidateTokenOutService;
+    private ValidateTokenOutService validateTokenOutService;
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token = jwtService.extractToken(request);
+            //String token = jwtService.extractToken(request);
+            
+            String token = request.getHeader("Authorization");
+        	Boolean tokenIsActive = this.validateTokenOutService.tokenIsActive(token);
+        								 
 
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
-                Boolean isActive = valiiValidateTokenOutService.tokenIsActive(token);
-                if (claims != null && Boolean.TRUE.equals(isActive)) {
+                if (claims != null && Boolean.TRUE.equals(tokenIsActive)) {
                     String role = claims.get("role", String.class);
                     if (role != null) {
                         filterChain.doFilter(request, response);

@@ -80,23 +80,16 @@ public class ItemService {
     public ItemDTO insert(ItemDTO dto, String bearerToken) {
         var entity = new Item();
         dto = processaProdutoEstoque(dto,bearerToken);
-        String username = jwtService.extractUsername(bearerToken);
-        dto.setEmailUsuario(username);
+        
+        //String username = jwtService.extractUsername(bearerToken);
+        //TODO - ACERTO COM O NOME DO USUARIO
+        dto.setEmailUsuario(dto.getEmailUsuario());
         BeanUtils.copyProperties(dto, entity);
         var itemSaved = repo.save(entity);
         return new ItemDTO(itemSaved);
     }
     
-    @Transactional
-    public ItemDTO insert(ItemDTO dto) {
-        var entity = new Item();
-        dto = processaProdutoEstoque(dto);
-        //String username = jwtService.extractUsername(bearerToken);
-        //dto.setEmailUsuario(username);
-        BeanUtils.copyProperties(dto, entity);
-        var itemSaved = repo.save(entity);
-        return new ItemDTO(itemSaved);
-    }
+   
 
     @Transactional
     public ItemDTO updateQuantidade(Long id, Long novaQuantidade) {
@@ -121,13 +114,6 @@ public class ItemService {
 
     private ItemDTO processaProdutoEstoque(ItemDTO item, String bearerToken){
         var produto = serviceEstoqueOut.buscarInformacoesProduto(item,bearerToken);
-        item.setIdProduto(produto.getId());
-        item.setValor(produto.getValorUnitario() * item.getQuantidade());
-        return item;
-    }
-    
-    private ItemDTO processaProdutoEstoque(ItemDTO item){
-        var produto = serviceEstoqueOut.buscarInformacoesProduto(item);
         item.setIdProduto(produto.getId());
         item.setValor(produto.getValorUnitario() * item.getQuantidade());
         return item;
