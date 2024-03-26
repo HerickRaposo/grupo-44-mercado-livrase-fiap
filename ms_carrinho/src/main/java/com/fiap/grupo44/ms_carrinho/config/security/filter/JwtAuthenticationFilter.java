@@ -1,14 +1,14 @@
-package com.fiap.ms_estoque.Config.security;
+package com.fiap.grupo44.ms_carrinho.config.security.filter;
 
-import com.fiap.ms_estoque.adapters.out.ValidateTokenOutService;
-import com.fiap.ms_estoque.dominio.produto.service.JwtService;
+
+import com.fiap.grupo44.ms_carrinho.adapters.out.ValidateTokenOutService;
+import com.fiap.grupo44.ms_carrinho.dominio.item.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,7 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private ValidateTokenOutService validateTokenOutService;
+    private ValidateTokenOutService valiiValidateTokenOutService;
 
 
     @Override
@@ -31,22 +31,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null) {
                 Claims claims = jwtService.extractAllClaims(token);
-                Boolean isActive = validateTokenOutService.tokenIsActive(token);
+                Boolean isActive = valiiValidateTokenOutService.tokenIsActive(token);
                 if (claims != null && Boolean.TRUE.equals(isActive)) {
-                    Authentication authentication = jwtService.buildAuthentication(claims);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    String role = claims.get("role", String.class);
+                    if (role != null) {
+                        filterChain.doFilter(request, response);
+                    }
                 }
             }
         } catch (Exception e) {
+            System.out.println(request.getRequestURI());
+            System.out.println(e.getMessage());
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        filterChain.doFilter(request, response);
+
 
     }
-
-
 }
 

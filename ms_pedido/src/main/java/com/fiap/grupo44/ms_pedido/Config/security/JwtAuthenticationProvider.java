@@ -1,7 +1,7 @@
 package com.fiap.ms_estoque.Config.security;
 
 
-import com.fiap.ms_estoque.dominio.produto.service.JwtService;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.JwtService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

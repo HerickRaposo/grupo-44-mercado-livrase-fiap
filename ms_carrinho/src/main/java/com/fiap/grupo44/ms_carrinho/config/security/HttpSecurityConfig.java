@@ -1,9 +1,10 @@
 package com.fiap.grupo44.ms_carrinho.config.security;
 
+
+import com.fiap.grupo44.ms_carrinho.config.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,9 +29,6 @@ public class HttpSecurityConfig {
                 .sessionManagement( seesMagConfi -> seesMagConfi.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(daoAuthProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(authReqConfig -> {
-                    authReqConfig.anyRequest().permitAll();
-                })
                 .build();
 
         return securityFilterChain;

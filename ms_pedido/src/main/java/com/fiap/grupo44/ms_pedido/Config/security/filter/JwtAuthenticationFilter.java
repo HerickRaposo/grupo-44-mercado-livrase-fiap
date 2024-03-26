@@ -1,7 +1,8 @@
-package com.fiap.grupo44.ms_carrinho.config.security;
+package com.fiap.grupo44.ms_pedido.Config.security.filter;
 
-import com.fiap.grupo44.ms_carrinho.adapters.out.ValidateTokenOutService;
-import com.fiap.grupo44.ms_carrinho.dominio.item.service.JwtService;
+
+import com.fiap.grupo44.ms_pedido.adapters.out.ValidateTokenOutService;
+import com.fiap.grupo44.ms_pedido.dominio.pedidoitems.service.JwtService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println(request.getRequestURI());
         try {
             String token = jwtService.extractToken(request);
 
@@ -33,20 +35,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = jwtService.extractAllClaims(token);
                 Boolean isActive = validateTokenOutService.tokenIsActive(token);
                 if (claims != null && Boolean.TRUE.equals(isActive)) {
-                    Authentication authentication = jwtService.buildAuthentication(claims);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    String role = claims.get("role", String.class);
+                    System.out.println("Aqui veio a role  " + role);
+                    if (role != null) {
+                        filterChain.doFilter(request, response);
+                    }
                 }
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        filterChain.doFilter(request, response);
+
 
     }
-
-
 }
 

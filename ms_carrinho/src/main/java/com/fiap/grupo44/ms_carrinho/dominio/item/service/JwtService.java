@@ -1,21 +1,14 @@
 package com.fiap.grupo44.ms_carrinho.dominio.item.service;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.Map;
-
 
 @Service
 public class JwtService {
@@ -37,16 +30,10 @@ public class JwtService {
 
     }
 
-    public String extractUsername(String jwt) {
-
-        return extractAllClaims(jwt).getSubject();
-    }
-
     public Claims extractAllClaims(String jwt) {
         return Jwts.parser().verifyWith( generateKey() ).build()
                 .parseSignedClaims(jwt).getPayload();
     }
-
 
     public String extractToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
@@ -56,10 +43,8 @@ public class JwtService {
         return null;
     }
 
-    public Authentication buildAuthentication(Claims claims) {
-        String sub = claims.getSubject();
-        return new UsernamePasswordAuthenticationToken(sub, null);
+    public  String extractUsername(String jwt) {
+        return extractAllClaims(jwt).getSubject();
     }
-
 
 }

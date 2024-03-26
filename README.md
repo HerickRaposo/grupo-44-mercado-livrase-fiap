@@ -412,40 +412,49 @@ O cadastro assim como os demais endpoints necessita o envio do token obtido no l
 ```
 Request:
 curl --request POST \
-    --url http://localhost:8081/produto \
-    --header 'Content-Type: application/json' \
-    --header 'User-Agent: Insomnia/2023.5.7' \
-    --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
-    --data '{
-    "descricao": "Produto B",
-    "quantidadeEstoque": 10,
-    "valorUnitario": 50.5
-}
-'
+  --url http://localhost:8081/api/v1/produto/cadastro \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.6.1' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	"descricao":"radio",
+	"quantidadeEstoque":10,
+	"valorUnitario":1500.97
+}'
 
 Response:
 {
-    "id": 3,
-    "descricao": "Produto B",
-    "quantidadeEstoque": 10,
-    "valorUnitario": 50.5
+	"id": 4,
+	"descricao": "radio",
+	"quantidadeEstoque": 1,
+	"valorUnitario": 1500.97
 }
 ```
 
 ### Atualização de produtos
 Na atualização de produtos todos os atributos exceto o id poderão ser modificados.
 ```
-curl --location --request PUT 'http://localhost:8080/api/v1/localidades/1' \
---header 'Content-Type: application/json' \
---data '{
-  "id": 1,
-  "nome": "Localidade Teste update",
-  "enderecoDTO": {
-    "id": 1
-  },
-  "idsAmenidades": [1, 2, 3]
+curl --request PUT \
+  --url http://localhost:8081/api/v1/produto/update/4 \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
+  --header 'Content-Type: application/json' \
+  --header 'User-Agent: insomnia/8.6.1' \
+  --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
+  --data '{
+	"descricao":"tc",
+	"quantidadeEstoque":10,
+	"valorUnitario":1500.97
+}'
+
+Response:
+{
+	"id": 4,
+	"descricao": "tv",
+	"quantidadeEstoque": 1,
+	"valorUnitario": 1500.97
 }
-'
+
 ```
 
 ### Deletar produtos
@@ -453,7 +462,8 @@ Para realizar a deleção basta completar url com o identificador do produto a s
 
 ```
 curl --request DELETE \
-  --url http://localhost:8081/produto/2 \
+  --url http://localhost:8081/produto/deletar/2 \
+  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517                  
 ```
@@ -463,19 +473,26 @@ Ao listar os resultados são exibidos de forma paginada.
 Request:
 curl --request GET \
   --url http://localhost:8081/produto \
+ --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
 '
 
 Response:
-     {
+{
 	"content": [
 		{
 			"id": 3,
 			"descricao": "Produto B",
 			"quantidadeEstoque": 10,
 			"valorUnitario": 50.5
+		},
+		{
+			"id": 4,
+			"descricao": "radio",
+			"quantidadeEstoque": 10,
+			"valorUnitario": 1500.97
 		}
 	],
 	"pageable": {
@@ -492,9 +509,7 @@ Response:
 	},
 	"last": true,
 	"totalPages": 1,
-	"totalElements": 1,
-	"first": true,
-	"numberOfElements": 1,
+	"totalElements": 2,
 	"size": 10,
 	"number": 0,
 	"sort": {
@@ -502,15 +517,18 @@ Response:
 		"sorted": false,
 		"unsorted": true
 	},
+	"numberOfElements": 2,
+	"first": true,
 	"empty": false
-}               
+}
 ```
 ### Busca por ID
 
 ```
 Request:
 curl --request GET \
-      --url http://localhost:8081/produto/3 \
+      --url http://localhost:8081/produto/busca/3 \
+       --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0 ' \
       --header 'Content-Type: application/json' \
       --header 'User-Agent: Insomnia/2023.5.7' \
       --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517
@@ -541,24 +559,23 @@ Neste endpoint na requisição enviamos apenas o id do produto que  será adicio
 ```
 Request:
 curl --request POST \
-  --url http://localhost:8082/carrinho \
-  --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTA4MTM0OTcsImV4cCI6MTcxMDgxNTI5Nywicm9sZSI6IlJPTEVfQ1VTVE9NRVIiLCJuYW1lIjoiSGVyaWNrIGRhIFNpbHZhIFNhdXJvcyIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.3JhXuWz3WVawo1W7f2hcK0Zfe7HwUxQn5T6kVFEF2AQ' \
+  --url http://localhost:8082//api/v1/carrinho \
+  --header 'Authorization: Bearer Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJpY2tAaG90bWFpbC5jb20iLCJpYXQiOjE3MTE0MTg4NDIsImV4cCI6MTcxMTQyNDI0Miwicm9sZSI6IlJPTEVfQURNSU5JU1RSQVRPUiIsIm5hbWUiOiJIZXJpY2sgZGEgU2lsdmEgU2F1cm9zIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.DxcEcST7p2mXrjUQ425NSfUhxzyxBkMapn0V_a98-m0' \
   --header 'Content-Type: application/json' \
   --header 'User-Agent: Insomnia/2023.5.7' \
   --cookie JSESSIONID=D7ED8DCCC055A4D43250F761B4B29517 \
   --data '{
-  "idProduto": 3,
-  "quantidade": 5
+  "idProduto": 123,
+  "quantidade": 2
 }'
-'
 
 Response:
 {
-    "id": 1,
-    "idProduto": 3,
-    "emailUsuario": "herick@hotmail.com",
-    "quantidade": 5,
-    "valor": 252.5
+	"timestamp": "2024-03-26T03:23:50.115+00:00",
+	"status": 400,
+	"error": "Bad Request",
+	"message": "No message available",
+	"path": "//api/v1/carrinho"
 }
 ```
 ### Atualização de quantidade de itens
