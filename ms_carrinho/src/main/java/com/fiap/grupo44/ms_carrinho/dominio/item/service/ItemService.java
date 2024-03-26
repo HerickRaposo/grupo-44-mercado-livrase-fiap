@@ -109,6 +109,9 @@ public class ItemService {
     		itensPedidoDTOin.setValorUnitario(item.getValor());
     		
     		pedidoDTOin.getItensPedido().add(itensPedidoDTOin);
+    		
+    		item.setCompraFechada(true);
+    		this.repo.save(item);
 		}
     	
     	//INVOCAR A API DE PEDIDO
