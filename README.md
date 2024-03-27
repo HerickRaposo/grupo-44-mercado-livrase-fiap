@@ -21,8 +21,6 @@ Vale lembrar que para facilitar a publicação de projeto colocamos os projetos 
 
 [JSON Web Token (JWT)](https://jwt.io/): O JSON Web Token é um padrão da Internet para a criação de dados com assinatura opcional e/ou criptografia cujo payload contém o JSON que afirma algum número de declarações.
 
-[Docker](https://www.docker.com/): Docker é um conjunto de produtos de plataforma como serviço que usam virtualização de nível de sistema operacional para entregar software em pacotes chamados contêineres.
-
 [GitLab](https://about.gitlab.com/): Plataforma de gerenciamento de ciclo de vida de desenvolvimento de software com versionamento de codigo git.
 
 [Postman](https://learning.postman.com/docs/developer/postman-api/intro-api/): Ferramenta destinada a desenvolvedores que possibilita testar chamadas API e gerar documentação de forma iterativa.Foi usado neste projeto para gerar collections e realizar teste de chamadas aos endpoints;
@@ -36,11 +34,9 @@ Vale lembrar que para facilitar a publicação de projeto colocamos os projetos 
 - Uso de DTOs para a API
 - Injeção de Dependências
 - Arquitetura hexagonal
-- Utilização de dockers para compilação do projeto
 
 ## Escalabilidade de sistema:
 
-- [Modularização em Containner e Docker](https://about.gitlab.com/): Docker é uma plataforma de código aberto que facilita a criação, implantação e gerenciamento de aplicativos por meio de contêineres, que são ambientes isolados e leves. Esses contêineres empacotam aplicativos e suas dependências, permitindo uma execução consistente em diversos sistemas, eliminando problemas de compatibilidade e melhorando a eficiência no desenvolvimento.
 
 - [CI](https://about.gitlab.com/) (Continuous Integration):  CI (Continuous Integration) é uma prática de desenvolvimento em que as alterações de código são regularmente integradas e testadas automaticamente. O GitLab CI automatiza esse processo, organizando-o em pipelines, que representam as etapas de construção, teste e implantação de um aplicativo. Isso melhora a eficiência e a qualidade do desenvolvimento de software.[Veja pipeline executada](https://gitlab.com/mattec1/grupo-44-sistema-de-parquimetro-fiap/-/jobs/5473301001)
 
@@ -103,6 +99,7 @@ kubernetes:
 ### Localmente
 - Clonar repositório git
 - Construir o projeto:
+- Criar bancos localmente nas portas equivalentes aos serviços
 ```
 ./mvnw clean package
 ```
@@ -111,24 +108,16 @@ kubernetes:
 
 - - - A API poderá ser acessada em [localhost:8080](http://127.0.0.1:8080/)
 
-- - - O Swagger poderá ser visualizado em [localhost:8080/swagger-ui.html](http://127.0.0.1:8080//swagger-ui.html)
-
 - - Microserviço Estoque:
 
 - - - A API poderá ser acessada em [localhost:8081](http://127.0.0.1:8081)
 
-- - -O Swagger poderá ser visualizado em [localhost:8081/swagger-ui.html](http://127.0.0.1:8081/swagger-ui.html)
-
 - - Microserviço Carrinho:
 
-- - - A API poderá ser acessada em [localhost:8082](http://localhost:8082)
-
-- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://127.0.0.1:8082/swagger-ui.html)
+- - - A API poderá ser acessada em [localhost:8082](http://127.0.0.1:8082)
 
 - - Microserviço Pedidos:
-- - - A API poderá ser acessada em [localhost:8083](http://localhost:8083)
-
-- - - O Swagger poderá ser visualizado em [localhost:8082/swagger-ui.html](http://localhost:8083/swagger-ui.html)
+- - - A API poderá ser acessada em [localhost:8083](http://127.0.0.1::8083)
 
 
 
