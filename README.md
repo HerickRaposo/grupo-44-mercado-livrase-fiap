@@ -44,7 +44,7 @@ Vale lembrar que para facilitar a publicação de projeto colocamos os projetos 
 ###############################################
 ##### Pipeline Gitlab-CI - v1.0           #####
 ##### MATTEC PROJETOS  - 13/03/2024       #####
-##### GRUPO 44 LOCACAO HACKATHON FIAP     #####
+##### GRUPO 44 MERCADO LIVRASE FIAP       #####
 ###############################################
 
 
