@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "04c5556b-149a-4570-88cb-12791f90252e",
+		"name": "MS-PEDIDO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11651276"
+	},
+	"item": [
+		{
+			"name": "BUACAR PEDIDOS PAGINADOS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8083/pedido/buscar-todos?pagina=2&tamanho=10",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8083",
+					"path": [
+						"pedido",
+						"buscar-todos"
+					],
+					"query": [
+						{
+							"key": "pagina",
+							"value": "2"
+						},
+						{
+							"key": "tamanho",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BUSCAR PEDIDO POR ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8083/pedido/buscarPorId?idPedido=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8083",
+					"path": [
+						"pedido",
+						"buscarPorId"
+					],
+					"query": [
+						{
+							"key": "idPedido",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SALVAR PEDIDO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"formaPagamento\": \"PIX\",\r\n    \"emailUsuario\": \"ernesto.sambongo@outlook.com\",\r\n    \"itensPedido\": [\r\n        {\r\n            \"idProduto\": \"10\",\r\n            \"descricao\": \"Iphone 15 pro max\",\r\n            \"quantidade\": \"3\",\r\n            \"valorUnitario\": \"3500\"\r\n        },\r\n        {\r\n            \"idProduto\": \"25\",\r\n            \"descricao\": \"Smart Tv 32 Philco Led Ptv32g23agssblh Android Tv\",\r\n            \"quantidade\": \"1\",\r\n            \"valorUnitario\": \"969\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8083/pedido/salvar",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8083",
+					"path": [
+						"pedido",
+						"salvar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VALIDAR PAGAMENTO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idPedido\":27,\r\n    \"dataPagamento\":\"2024-03-25\",\r\n    \"estadoPedido\":\"CANCELADO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8083/pedido/validar-pagamento-ou-cancelar",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8083",
+					"path": [
+						"pedido",
+						"validar-pagamento-ou-cancelar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETAR PEDIDO",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8083/pedido/apagar?idPedido=29",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8083",
+					"path": [
+						"pedido",
+						"apagar"
+					],
+					"query": [
+						{
+							"key": "idPedido",
+							"value": "29"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VALIDAR TOKEN",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/auth/validate-token?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"validate-token"
+					],
+					"query": [
+						{
+							"key": "jwt",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdXJlbG1hLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDY4Njk2LCJleHAiOjE3MTY2NTI2OTYsInJvbGUiOiJST0xFX0NVU1RPTUVSIiwibmFtZSI6Imp1cmVsbWEuc2FtYm9uZ28iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUkVBRF9NWV9QUk9GSUxFIn1dfQ.ovWdli1Ev96tgH0zv6pLJej70c05uS5vleiuTBrTXmE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AUTENTICAR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"ernesto.sambongo@outlook.com\",\r\n    \"password\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/auth/authenticate",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CRIAR UTILIZADOR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"jurelma.sambongo\",\r\n    \"username_or_email\":\"jurelma.sambongo@outlook.com\",\r\n    \"cpf\":\"23529772828\",\r\n    \"password\":\"123456789\",\r\n    \"repeatedPassword\":\"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/api/v1/setting/customers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"setting",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CADASTRAR PRODUTO - MS ESTOQUE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcm5lc3RvLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDcyNDk0LCJleHAiOjE3MTY2NTY0OTQsInJvbGUiOiJST0xFX0FETUlOSVNUUkFUT1IiLCJuYW1lIjoiRXJuZXN0byBUYWRldSBUY2hpdGVjdWxvIFNhbWJvbmdvIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.RinnW77hODlikTGL5gRb4V_ZOwI4l-T9zne5xrKh4C8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descricao\":\"Ihpone 14 pro max\",\r\n    \"quantidadeEstoque\":500,\r\n    \"valorUnitario\":2500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8081/api/v1/produto/cadastro",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"produto",
+						"cadastro"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LISTAR TODOS OS PRODUTOS - MS_ESTOQUE",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcm5lc3RvLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDcyNDk0LCJleHAiOjE3MTY2NTY0OTQsInJvbGUiOiJST0xFX0FETUlOSVNUUkFUT1IiLCJuYW1lIjoiRXJuZXN0byBUYWRldSBUY2hpdGVjdWxvIFNhbWJvbmdvIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.RinnW77hODlikTGL5gRb4V_ZOwI4l-T9zne5xrKh4C8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8081/api/v1/produto/listar",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"produto",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADICIONAR PRODUTO NO CARRINHO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcm5lc3RvLnNhbWJvbmdvQG91dGxvb2suY29tIiwiaWF0IjoxNzExNDc0MjQyLCJleHAiOjE3MTY2NTgyNDIsInJvbGUiOiJST0xFX0FETUlOSVNUUkFUT1IiLCJuYW1lIjoiRXJuZXN0byBUYWRldSBUY2hpdGVjdWxvIFNhbWJvbmdvIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJFQURfQUxMX1BST0RVQ1RTIn0seyJhdXRob3JpdHkiOiJSRUFEX09ORV9QUk9EVUNUIn0seyJhdXRob3JpdHkiOiJDUkVBVEVfT05FX1BST0RVQ1QifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiRElTQUJMRV9PTkVfUFJPRFVDVCJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9BTExfQ0FURUdPUklFUyJ9LHsiYXV0aG9yaXR5IjoiUkVBRF9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkNSRUFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IlVQREFURV9PTkVfQ0FURUdPUlkifSx7ImF1dGhvcml0eSI6IkRJU0FCTEVfT05FX0NBVEVHT1JZIn0seyJhdXRob3JpdHkiOiJSRUFEX01ZX1BST0ZJTEUifV19.6y7Xojku-1O6Ts3g2bKUUi0N5Lo1Tm5YZ3NHJYMqzoQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idProduto\": 4,\r\n    \"emailUsuario\": \"ernesto.sambongo@outlook.com\",\r\n    \"quantidade\": 2,\r\n    \"valor\": 14999\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8082/carrinho",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8082",
+					"path": [
+						"carrinho"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
